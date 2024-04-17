@@ -4,11 +4,11 @@ using GarageMVC.Models;
 
 namespace GarageMVC.Controllers;
 
-public class HomeController : Controller
+public class GarageController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<GarageController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public GarageController(ILogger<GarageController> logger)
     {
         _logger = logger;
     }
