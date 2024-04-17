@@ -9,15 +9,19 @@ namespace GarageMVC.Models
 
         public string? VehicleType { get; set; }
 
-        [Required(ErrorMessage = "Register Number is required!")]
+        [RegularExpression(@"^[A-Z]{3}\d{3}$", ErrorMessage = "Registration number must be in the format ABC123")]
         public string RegNumber { get; set; }
 
+        [MaxLength(20)]
         public string? Color { get; set; }
 
+        [MaxLength(20)]
         public string? Make { get; set; }
 
+        [MaxLength(20)]
         public string? Model { get; set; }
 
+        [Range(0, int.MaxValue, ErrorMessage = "Number of wheels must be a positive number")]
         public int? NumberOfWheels { get; set; }
 
         [Required]
