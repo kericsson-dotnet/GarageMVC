@@ -21,9 +21,9 @@ namespace GarageMVC.Models
         public int NumberOfWheels { get; set; }
 
         [Required]
-        public DateTime ParkingTime { get; set; }
+        public DateTime CheckInTime { get; set; } = DateTime.Now;
 
-        [Required]
+       [Required]
         public bool IsParked { get; set; }
 
 
