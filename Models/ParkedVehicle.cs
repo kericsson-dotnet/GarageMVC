@@ -2,12 +2,18 @@
 
 namespace GarageMVC.Models
 {
+    public enum VehicleType
+    {
+        Car,
+        Motorcycle,
+        Bus,
+    }
     public class ParkedVehicle
     {
         [Key]
         public int Id { get; set; }
 
-        public string? VehicleType { get; set; }
+        public VehicleType VehicleType { get; set; }
 
         [RegularExpression(@"^[A-Z]{3}\d{3}$", ErrorMessage = "Registration number must be in the format ABC123")]
         public string RegNumber { get; set; }
