@@ -32,12 +32,5 @@ namespace GarageMVC.Models
 
         [Required]
         public DateTime ParkingTime { get; set; }
-
-        [Required]
-        public bool IsParked { get; set; }
-
-
-
-
     }
 }
