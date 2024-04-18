@@ -2,23 +2,33 @@
 
 namespace GarageMVC.Models
 {
+    public enum VehicleType
+    {
+        Car,
+        Motorcycle,
+        Bus,
+    }
     public class ParkedVehicle
     {
-
+        [Key]
         public int Id { get; set; }
 
-        public string VehicleType { get; set; }
+        public VehicleType VehicleType { get; set; }
 
-        [Required(ErrorMessage = "Register Number is required!")]
+        [RegularExpression(@"^[A-Z]{3}\d{3}$", ErrorMessage = "Registration number must be in the format ABC123")]
         public string RegNumber { get; set; }
 
-        public string Color { get; set; }
+        [MaxLength(20)]
+        public string? Color { get; set; }
 
-        public string Make { get; set; }
+        [MaxLength(20)]
+        public string? Make { get; set; }
 
-        public string Model { get; set; }
+        [MaxLength(20)]
+        public string? Model { get; set; }
 
-        public int NumberOfWheels { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "Number of wheels must be a positive number")]
+        public int? NumberOfWheels { get; set; }
 
         [Required]
         public DateTime CheckInTime { get; set; } = DateTime.Now;
