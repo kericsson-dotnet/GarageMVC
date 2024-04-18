@@ -16,17 +16,24 @@
         <input type="hidden" id="selectedId" name="Id" value="@ViewBag.SelectedId" />
         <input type="submit" value="Unpark" class="btn btn-danger" />
     </form>
-
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
 </div>
 
-    @* Uppatera selectedId när ett parkerat fordon väljs *@
+@* Här ska ParkingTime in (lägg till logik att räkna ut parkerad tid) *@
+<div class="custom-container" id="parkingTimeContainer">  
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+@* Uppatera selectedId när ett parkerat fordon väljs *@
 <script>
     function updateSelectedId(select) {
         var selectedId = select.options[select.selectedIndex].value;
         document.getElementById('selectedId').value = selectedId;
     }
 </script>
+
+
 

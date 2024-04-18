@@ -1,5 +1,7 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -12,11 +14,22 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
+/*html {
   position: relative;
   min-height: 100%;
-}
+}*/
 
 body {
   margin-bottom: 60px;
+}
+
+.custom-container {
+    width: 315px;
+    height: 592px;
+    background-image: url('/images/receipt.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid black;
+    border-radius: 3px;
+    text-align: center;
 }
