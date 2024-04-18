@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace GarageMVC.Models
 {
@@ -8,6 +9,7 @@ namespace GarageMVC.Models
         Motorcycle,
         Bus,
     }
+    [Index(nameof(RegNumber), IsUnique = true)]
     public class ParkedVehicle
     {
         [Key]
