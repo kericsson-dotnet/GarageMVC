@@ -61,10 +61,49 @@ namespace GarageMVC.Controllers
             return View(parkedVehicle);
         }
 
+        public IActionResult Unpark()
+        {
+            RegNumberList();
+
+            return View();
+        }
+
         // GET: Garage/Create
         public IActionResult Create()
         {
             return View();
+        }
+
+        public ActionResult RegNumberList()
+        {
+            var vehicles = _context.ParkedVehicle.ToList();
+            ViewBag.RegNumberSelectList = new SelectList(vehicles, "Id", "RegNumber");
+
+            ViewBag.SelectedId = -1;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SeedVehicles()
+        {
+            var seed = new[]
+            {
+                new ParkedVehicle {
+                    VehicleType = VehicleType.Car, RegNumber = "ABC123", Color = "Red", Make = "Reliant", Model = "Robin", NumberOfWheels = 3, CheckInTime = DateTime.Now.AddHours(-1)
+                },
+                new ParkedVehicle {
+                    VehicleType = VehicleType.Bus, RegNumber = "DEF456", Color = "Black", Make = "Scania", Model = "Citywide", NumberOfWheels = 8, CheckInTime = DateTime.Now.AddHours(-4)
+                },
+                new ParkedVehicle {
+                    VehicleType = VehicleType.Car, RegNumber = "ZXY666", Color = "Yellow", Make = "Pagani", Model = "Zonda", NumberOfWheels = 4, CheckInTime = DateTime.Now.AddHours(-8)
+                },
+            };
+
+            _context.ParkedVehicle.AddRange(seed);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         // POST: Garage/Create

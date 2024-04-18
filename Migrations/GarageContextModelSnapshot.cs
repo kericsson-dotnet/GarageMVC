@@ -49,12 +49,15 @@ namespace GarageMVC.Migrations
 
                     b.Property<string>("RegNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("VehicleType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RegNumber")
+                        .IsUnique();
 
                     b.ToTable("ParkedVehicle");
                 });
