@@ -7,60 +7,54 @@
 <h1>Details</h1>
 
 <div>
-    <h4>ParkedVehicle</h4>
+    <h4>Parked Vehicles</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.VehicleType)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.VehicleType)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.RegNumber)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RegNumber)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Color)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Color)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Make)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Make)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Model)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Model)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NumberOfWheels)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NumberOfWheels)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ParkingTime)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CheckInTime)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ParkingTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsParked)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsParked)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CheckInTime)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    <a class="btn btn-outline-info" asp-action="Index">Back to List</a>
 </div>

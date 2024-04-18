@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GarageMVC.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    [Migration("20240417101831_Init")]
+    [Migration("20240418092442_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -32,34 +32,30 @@ namespace GarageMVC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CheckInTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsParked")
-                        .HasColumnType("bit");
+                    b.Property<string>("Color")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Make")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Model")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("NumberOfWheels")
+                    b.Property<int?>("NumberOfWheels")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("ParkingTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("RegNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VehicleType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("VehicleType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

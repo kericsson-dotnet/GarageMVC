@@ -18,6 +18,25 @@ namespace GarageMVC.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> CheckInVehicle(string regNumber)
+        {
+            // Retrieve the vehicle from the database based on the vehicleId
+            var parkedvehicle = await _context.ParkedVehicle.FirstOrDefaultAsync(v => v.RegNumber == regNumber);
+            if (parkedvehicle == null)
+            {
+                return NotFound(); // Handle not found scenario
+            }
+
+            // Set the check-in time to the current time
+            parkedvehicle.CheckInTime = DateTime.Now;
+
+            // Update the vehicle entity in the database
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home"); // Redirect to the home page after check-in
+
+        }
+
         // GET: Garage
         public async Task<IActionResult> Index()
         {
