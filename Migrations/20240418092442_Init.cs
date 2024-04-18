@@ -17,14 +17,13 @@ namespace GarageMVC.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VehicleType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VehicleType = table.Column<int>(type: "int", nullable: false),
                     RegNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Make = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NumberOfWheels = table.Column<int>(type: "int", nullable: false),
-                    ParkingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsParked = table.Column<bool>(type: "bit", nullable: false)
+                    Color = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Make = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Model = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    NumberOfWheels = table.Column<int>(type: "int", nullable: true),
+                    CheckInTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
