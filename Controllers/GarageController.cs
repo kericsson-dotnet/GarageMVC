@@ -90,13 +90,13 @@ namespace GarageMVC.Controllers
             var seed = new[]
             {
                 new ParkedVehicle {
-                    VehicleType = "Car", RegNumber = "ABC123", Color = "Red", Make = "Reliant", Model = "Robin", NumberOfWheels = 3, ParkingTime = DateTime.Now.AddHours(-1), IsParked = true
+                    VehicleType = VehicleType.Car, RegNumber = "ABC123", Color = "Red", Make = "Reliant", Model = "Robin", NumberOfWheels = 3, CheckInTime = DateTime.Now.AddHours(-1)
                 },
                 new ParkedVehicle {
-                    VehicleType = "Bus", RegNumber = "DEF456", Color = "Black", Make = "Scania", Model = "Citywide", NumberOfWheels = 8, ParkingTime = DateTime.Now.AddHours(-4), IsParked = true
+                    VehicleType = VehicleType.Bus, RegNumber = "DEF456", Color = "Black", Make = "Scania", Model = "Citywide", NumberOfWheels = 8, CheckInTime = DateTime.Now.AddHours(-4)
                 },
                 new ParkedVehicle {
-                    VehicleType = "Car", RegNumber = "ZXY666", Color = "Yellow", Make = "Pagani", Model = "Zonda", NumberOfWheels = 4, ParkingTime = DateTime.Now.AddHours(-8), IsParked = true
+                    VehicleType = VehicleType.Car, RegNumber = "ZXY666", Color = "Yellow", Make = "Pagani", Model = "Zonda", NumberOfWheels = 4, CheckInTime = DateTime.Now.AddHours(-8)
                 },
             };
 
