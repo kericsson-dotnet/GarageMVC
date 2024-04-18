@@ -198,9 +198,20 @@ namespace GarageMVC.Controllers
             return View(parkedVehicle);
         }
 
-        public IActionResult Search(string RegNumber)
+        public IActionResult Search(string searchValue)
         {
-            IEnumerable<ParkedVehicle> searchVehicles = _context.ParkedVehicle.Where(v => v.RegNumber.Contains(RegNumber));
+            List<ParkedVehicle> searchVehicles = new List<ParkedVehicle>();
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
+
+            foreach (var vehicle in _context.ParkedVehicle)
+            {
+                string text = vehicle.VehicleType.ToString().ToLower();
+                if (text.Contains(searchValue.ToLower())) searchVehicles.Add(vehicle);
+            }
 
             return View("Index", searchVehicles);
         }
