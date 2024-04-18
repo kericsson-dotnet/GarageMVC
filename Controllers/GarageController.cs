@@ -42,11 +42,29 @@ namespace GarageMVC.Controllers
             return View(parkedVehicle);
         }
 
+        public IActionResult Unpark()
+        {
+            RegNumberList();
+
+            return View();
+        }
+
         // GET: Garage/Create
         public IActionResult Create()
         {
             return View();
         }
+
+        public ActionResult RegNumberList()
+        {
+            var vehicles = _context.ParkedVehicle.ToList();
+            ViewBag.RegNumberSelectList = new SelectList(vehicles, "Id", "RegNumber");
+
+            ViewBag.SelectedId = -1;
+
+            return View();
+        }
+
 
         // POST: Garage/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -152,5 +170,19 @@ namespace GarageMVC.Controllers
         {
             return _context.ParkedVehicle.Any(e => e.Id == id);
         }
+
+        [HttpPost]
+        public ActionResult Delete2(int Id)
+        {
+            var vehicleToDelete = _context.ParkedVehicle.FirstOrDefault(v => v.Id == Id);
+            if (vehicleToDelete != null)
+            {
+                _context.ParkedVehicle.Remove(vehicleToDelete);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
