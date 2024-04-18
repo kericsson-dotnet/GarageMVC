@@ -1,31 +1,175 @@
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using GarageMVC.Models;
 
-namespace GarageMVC.Controllers;
-
-public class GarageController : Controller
+namespace GarageMVC.Controllers
 {
-    private readonly ILogger<GarageController> _logger;
-
-    public GarageController(ILogger<GarageController> logger)
+    public class GarageController : Controller
     {
-        _logger = logger;
-    }
+        private readonly GarageContext _context;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
+        public GarageController(GarageContext context)
+        {
+            _context = context;
+        }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        public async Task<IActionResult> CheckInVehicle(string regNumber)
+        {
+            // Retrieve the vehicle from the database based on the vehicleId
+            var parkedvehicle = await _context.ParkedVehicle.FirstOrDefaultAsync(v => v.RegNumber == regNumber);
+            if (parkedvehicle == null)
+            {
+                return NotFound(); // Handle not found scenario
+            }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            // Set the check-in time to the current time
+            parkedvehicle.CheckInTime = DateTime.Now;
+
+            // Update the vehicle entity in the database
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home"); // Redirect to the home page after check-in
+
+        }
+
+        // GET: Garage
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.ParkedVehicle.ToListAsync());
+        }
+
+        // GET: Garage/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var parkedVehicle = await _context.ParkedVehicle
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (parkedVehicle == null)
+            {
+                return NotFound();
+            }
+
+            return View(parkedVehicle);
+        }
+
+        // GET: Garage/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Garage/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels,ParkingTime,IsParked")] ParkedVehicle parkedVehicle)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(parkedVehicle);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(parkedVehicle);
+        }
+
+        // GET: Garage/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
+            if (parkedVehicle == null)
+            {
+                return NotFound();
+            }
+            return View(parkedVehicle);
+        }
+
+        // POST: Garage/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels,ParkingTime,IsParked")] ParkedVehicle parkedVehicle)
+        {
+            if (id != parkedVehicle.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(parkedVehicle);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ParkedVehicleExists(parkedVehicle.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(parkedVehicle);
+        }
+
+        // GET: Garage/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var parkedVehicle = await _context.ParkedVehicle
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (parkedVehicle == null)
+            {
+                return NotFound();
+            }
+
+            return View(parkedVehicle);
+        }
+
+        // POST: Garage/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
+            if (parkedVehicle != null)
+            {
+                _context.ParkedVehicle.Remove(parkedVehicle);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool ParkedVehicleExists(int id)
+        {
+            return _context.ParkedVehicle.Any(e => e.Id == id);
+        }
     }
 }
