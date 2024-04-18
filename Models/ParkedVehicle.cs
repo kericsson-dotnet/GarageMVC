@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace GarageMVC.Models
 {
@@ -8,6 +9,7 @@ namespace GarageMVC.Models
         Motorcycle,
         Bus,
     }
+    [Index(nameof(RegNumber), IsUnique = true)]
     public class ParkedVehicle
     {
         [Key]
@@ -30,14 +32,6 @@ namespace GarageMVC.Models
         [Range(0, int.MaxValue, ErrorMessage = "Number of wheels must be a positive number")]
         public int? NumberOfWheels { get; set; }
 
-        [Required]
         public DateTime CheckInTime { get; set; } = DateTime.Now;
-
-       [Required]
-        public bool IsParked { get; set; }
-
-
-
-
     }
 }
