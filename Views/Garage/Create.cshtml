@@ -13,7 +13,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="VehicleType" class="control-label"></label>
+                <label asp-for="VehicleType" class="control-label">Vehicle Type</label>
                 <select asp-for="VehicleType" class="form-control">
                     <option value="">Select Vehicle Type</option>
                     <option value="Car">Car</option>
@@ -23,7 +23,7 @@
                 <span asp-validation-for="VehicleType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RegNumber" class="control-label"></label>
+                <label asp-for="RegNumber" class="control-label">Registration number</label>
                 <input asp-for="RegNumber" class="form-control" />
                 <span asp-validation-for="RegNumber" class="text-danger"></span>
             </div>
@@ -43,12 +43,12 @@
                 <span asp-validation-for="Model" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NumberOfWheels" class="control-label"></label>
+                <label asp-for="NumberOfWheels" class="control-label">Number Of Wheels</label>
                 <input asp-for="NumberOfWheels" class="form-control" />
                 <span asp-validation-for="NumberOfWheels" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-outline-primary" />
+            <div style="margin-top: 15px" class="form-group">
+                <input id="park" type="submit" value="Create" class="btn btn-outline-primary" />
                 <a class="btn btn-outline-info" asp-action="Index">Back to List</a>
             </div>
 
@@ -65,5 +65,11 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+            var message = '@TempData["Message"]';
+            if (message !== "") {
+                alert(message);
+            }
+        </script>
     }
 }

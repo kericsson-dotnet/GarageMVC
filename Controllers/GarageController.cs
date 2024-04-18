@@ -74,11 +74,18 @@ namespace GarageMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels,ParkingTime,IsParked")] ParkedVehicle parkedVehicle)
         {
-            if (ModelState.IsValid)
+            TempData["Message"] = "";
+
+            if (ModelState.IsValid && !ParkedVehicleExistsByReg(parkedVehicle.RegNumber))
             {
                 _context.Add(parkedVehicle);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber +" parked successfully!";
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber + " already parked!";
             }
             return View(parkedVehicle);
         }
@@ -152,6 +159,13 @@ namespace GarageMVC.Controllers
             return View(parkedVehicle);
         }
 
+        public IActionResult Search(string RegNumber)
+        {
+            IEnumerable<ParkedVehicle> searchVehicles = _context.ParkedVehicle.Where(v => v.RegNumber.Contains(RegNumber));
+
+            return View("Index", searchVehicles);
+        }
+
         // POST: Garage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -170,6 +184,11 @@ namespace GarageMVC.Controllers
         private bool ParkedVehicleExists(int id)
         {
             return _context.ParkedVehicle.Any(e => e.Id == id);
+        }
+
+        private bool ParkedVehicleExistsByReg(String RegNo)
+        {
+            return _context.ParkedVehicle.Any(v => v.RegNumber == RegNo);
         }
     }
 }
