@@ -30,14 +30,6 @@ namespace GarageMVC.Models
         [Range(0, int.MaxValue, ErrorMessage = "Number of wheels must be a positive number")]
         public int? NumberOfWheels { get; set; }
 
-        [Required]
         public DateTime CheckInTime { get; set; } = DateTime.Now;
-
-       [Required]
-        public bool IsParked { get; set; }
-
-
-
-
     }
 }
