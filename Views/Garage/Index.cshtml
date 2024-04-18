@@ -13,10 +13,10 @@
     <thead>
         <tr class="table-primary">
             <th>
-                @Html.DisplayNameFor(model => model.VehicleType)
+                Vehicle Type
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RegNumber)
+                Registration Number
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Color)
@@ -28,10 +28,10 @@
                 @Html.DisplayNameFor(model => model.Model)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberOfWheels)
+                Number Of Wheels
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CheckInTime)
+                Check In Time
             </th>
             <th></th>
         </tr>
@@ -69,3 +69,13 @@
 }
     </tbody>
 </table>
+@section Scripts {
+    @{
+        <script>
+            var message = '@TempData["Message"]';
+            if (message !== "") {
+                alert(message);
+            }
+        </script>
+    }
+}
