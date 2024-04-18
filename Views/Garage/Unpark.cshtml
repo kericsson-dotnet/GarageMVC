@@ -11,7 +11,7 @@
         @Html.DropDownList("Id", (SelectList)ViewBag.RegNumberSelectList, "Select a Vehicle", new { @onchange = "updateSelectedId(this)" })
     </span>
 
-    @* "selectedId" är Id tillhörade respektive regnummer. Detta är dolt för användaren i listan, endast regnummer visas*@
+    @* "selectedId" är Id tillhörade respektive regnummer, endast regnummer visas*@
     <form id="unparkForm" asp-controller="Garage" asp-action="Delete" method="post">
         <input type="hidden" id="selectedId" name="Id" value="@ViewBag.SelectedId" />
         <input type="submit" value="Unpark" class="btn btn-danger" />
@@ -27,7 +27,7 @@
 </div>
 
 
-@* Uppatera selectedId när ett parkerat fordon väljs *@
+@* Uppatera selectedId efter val *@
 <script>
     function updateSelectedId(select) {
         var selectedId = select.options[select.selectedIndex].value;

@@ -65,7 +65,27 @@ namespace GarageMVC.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult SeedVehicles()
+        {
+            var seed = new[]
+            {
+                new ParkedVehicle {
+                    VehicleType = "Car", RegNumber = "ABC123", Color = "Red", Make = "Reliant", Model = "Robin", NumberOfWheels = 3, ParkingTime = DateTime.Now.AddHours(-1), IsParked = true
+                },
+                new ParkedVehicle {
+                    VehicleType = "Bus", RegNumber = "DEF456", Color = "Black", Make = "Scania", Model = "Citywide", NumberOfWheels = 8, ParkingTime = DateTime.Now.AddHours(-4), IsParked = true
+                },
+                new ParkedVehicle {
+                    VehicleType = "Car", RegNumber = "ZXY666", Color = "Yellow", Make = "Pagani", Model = "Zonda", NumberOfWheels = 4, ParkingTime = DateTime.Now.AddHours(-8), IsParked = true
+                },
+            };
 
+            _context.ParkedVehicle.AddRange(seed);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
 
         // POST: Garage/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -171,19 +191,5 @@ namespace GarageMVC.Controllers
         {
             return _context.ParkedVehicle.Any(e => e.Id == id);
         }
-
-        [HttpPost]
-        public ActionResult Delete2(int Id)
-        {
-            var vehicleToDelete = _context.ParkedVehicle.FirstOrDefault(v => v.Id == Id);
-            if (vehicleToDelete != null)
-            {
-                _context.ParkedVehicle.Remove(vehicleToDelete);
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction("Index");
-        }
-
     }
 }
