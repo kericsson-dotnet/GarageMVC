@@ -97,6 +97,19 @@
 <p>
     <a class="btn btn-outline-primary" asp-action="Create">Check in Vehicle</a>
 </p>
+
+
+<p>
+    <a href="@Url.Action("Unpark", "Garage")" class="btn btn-primary">Unpark Vehicle</a>
+</p>
+
+<p>
+    @using (Html.BeginForm("SeedVehicles", "Garage", FormMethod.Post))
+    {
+        <input type="submit" value="Seed" />
+    }
+</p>
+
 <table class="table table-hover">
     <thead>
         <tr class="table-primary">
@@ -179,4 +192,13 @@
         }
     </tbody>
 </table>
-
+@section Scripts {
+    @{
+        <script>
+            var message = '@TempData["Message"]';
+            if (message !== "") {
+                alert(message);
+            }
+        </script>
+    }
+}

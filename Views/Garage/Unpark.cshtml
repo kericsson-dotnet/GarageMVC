@@ -1,0 +1,39 @@
+﻿@model GarageMVC.Models.ParkedVehicle
+
+@{
+    ViewData["Title"] = "Unpark";
+}
+
+<h1>Unpark Vehicle</h1>
+
+<div>
+    <span>
+        @Html.DropDownList("Id", (SelectList)ViewBag.RegNumberSelectList, "Select a Vehicle", new { @onchange = "updateSelectedId(this)" })
+    </span>
+
+    @* "selectedId" är Id tillhörade respektive regnummer, endast regnummer visas*@
+    <form id="unparkForm" asp-controller="Garage" asp-action="Delete" method="post">
+        <input type="hidden" id="selectedId" name="Id" value="@ViewBag.SelectedId" />
+        <input type="submit" value="Unpark" class="btn btn-danger" />
+    </form>
+</div>
+
+@* Här ska ParkingTime in (lägg till logik att räkna ut parkerad tid) *@
+<div class="custom-container" id="parkingTimeContainer">  
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+@* Uppatera selectedId efter val *@
+<script>
+    function updateSelectedId(select) {
+        var selectedId = select.options[select.selectedIndex].value;
+        document.getElementById('selectedId').value = selectedId;
+    }
+</script>
+
+
+

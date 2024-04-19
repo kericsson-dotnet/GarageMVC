@@ -152,10 +152,49 @@ namespace GarageMVC.Controllers
             return View(parkedVehicle);
         }
 
+        public IActionResult Unpark()
+        {
+            RegNumberList();
+
+            return View();
+        }
+
         // GET: Garage/Create
         public IActionResult Create()
         {
             return View();
+        }
+
+        public ActionResult RegNumberList()
+        {
+            var vehicles = _context.ParkedVehicle.ToList();
+            ViewBag.RegNumberSelectList = new SelectList(vehicles, "Id", "RegNumber");
+
+            ViewBag.SelectedId = -1;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SeedVehicles()
+        {
+            var seed = new[]
+            {
+                new ParkedVehicle {
+                    VehicleType = VehicleType.Car, RegNumber = "ABC123", Color = "Red", Make = "Reliant", Model = "Robin", NumberOfWheels = 3, CheckInTime = DateTime.Now.AddHours(-1)
+                },
+                new ParkedVehicle {
+                    VehicleType = VehicleType.Bus, RegNumber = "DEF456", Color = "Black", Make = "Scania", Model = "Citywide", NumberOfWheels = 8, CheckInTime = DateTime.Now.AddHours(-4)
+                },
+                new ParkedVehicle {
+                    VehicleType = VehicleType.Car, RegNumber = "ZXY666", Color = "Yellow", Make = "Pagani", Model = "Zonda", NumberOfWheels = 4, CheckInTime = DateTime.Now.AddHours(-8)
+                },
+            };
+
+            _context.ParkedVehicle.AddRange(seed);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         // POST: Garage/Create
@@ -165,11 +204,18 @@ namespace GarageMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels,ParkingTime,IsParked")] ParkedVehicle parkedVehicle)
         {
-            if (ModelState.IsValid)
+            TempData["Message"] = "";
+
+            if (ModelState.IsValid && !ParkedVehicleExistsByReg(parkedVehicle.RegNumber))
             {
                 _context.Add(parkedVehicle);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber +" parked successfully!";
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber + " already parked!";
             }
             return View(parkedVehicle);
         }
@@ -243,6 +289,24 @@ namespace GarageMVC.Controllers
             return View(parkedVehicle);
         }
 
+        public IActionResult Search(string searchValue)
+        {
+            List<ParkedVehicle> searchVehicles = new List<ParkedVehicle>();
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
+
+            foreach (var vehicle in _context.ParkedVehicle)
+            {
+                string text = vehicle.VehicleType.ToString().ToLower();
+                if (text.Contains(searchValue.ToLower())) searchVehicles.Add(vehicle);
+            }
+
+            return View("Index", searchVehicles);
+        }
+
         // POST: Garage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -261,6 +325,11 @@ namespace GarageMVC.Controllers
         private bool ParkedVehicleExists(int id)
         {
             return _context.ParkedVehicle.Any(e => e.Id == id);
+        }
+
+        private bool ParkedVehicleExistsByReg(String RegNo)
+        {
+            return _context.ParkedVehicle.Any(v => v.RegNumber == RegNo);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace GarageMVC.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VehicleType = table.Column<int>(type: "int", nullable: false),
-                    RegNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RegNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Make = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Model = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
@@ -29,6 +29,12 @@ namespace GarageMVC.Migrations
                 {
                     table.PrimaryKey("PK_ParkedVehicle", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParkedVehicle_RegNumber",
+                table: "ParkedVehicle",
+                column: "RegNumber",
+                unique: true);
         }
 
         /// <inheritdoc />
