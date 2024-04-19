@@ -18,6 +18,17 @@ namespace GarageMVC.Controllers
             _context = context;
         }
 
+        public ActionResult Index2()
+        {
+            // Retrieve data from the database
+            var data = _context
+
+            // Pass the data to the view
+            ViewBag.YourData = new SelectList(data, "Id", "Name");
+
+            return View();
+        }
+
         public async Task<IActionResult> CheckInVehicle(string regNumber)
         {
             // Retrieve the vehicle from the database based on the vehicleId
