@@ -1,8 +1,10 @@
-﻿@model IEnumerable<GarageMVC.Models.ParkedVehicle>
+﻿@* @model IEnumerable<GarageMVC.Models.ParkedVehicle>
 
 @{
     ViewData["Title"] = "Index";
 }
+
+
 
 <h1 class="heading">Parked Vehicles List</h1>
 
@@ -13,59 +15,168 @@
     <thead>
         <tr class="table-primary">
             <th>
-                @Html.DisplayNameFor(model => model.VehicleType)
+                @Html.ActionLink("Vehicle Type", "Index", new { sortOrder = ViewBag.VehicleTypeSort })
+                @Html.Raw(ViewBag.VehicleTypeSort == "vehicleType_desc" ? " ▼" : " ▲")
+            </th>
+
+
+           
+
+            <th>
+                @Html.ActionLink("Registration Number", "Index", new { sortOrder = ViewBag.RegNumberSort })
+                @Html.Raw(ViewBag.RegNumberSort == "regNumber_desc" ? " ▼" : " ▲")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RegNumber)
+                @Html.ActionLink("Color", "Index", new { sortOrder = ViewBag.ColorSort })
+                @Html.Raw(ViewBag.ColorSort == "color_desc" ? " ▼" : " ▲")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Color)
+                @Html.ActionLink("Make", "Index", new { sortOrder = ViewBag.MakeSort })
+                @Html.Raw(ViewBag.MakeSort == "make_desc" ? " ▼" : " ▲")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Make)
+                @Html.ActionLink("Model", "Index", new { sortOrder = ViewBag.ModelSort })
+                @Html.Raw(ViewBag.ModelSort == "model_desc" ? " ▼" : " ▲")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Model)
+                @Html.ActionLink("Number of Wheels", "Index", new { sortOrder = ViewBag.NumberOfWheelsSort })
+                @Html.Raw(ViewBag.NumberOfWheelsSort == "numberOfWheels_desc" ? " ▼" : " ▲")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberOfWheels)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckInTime)
+                @Html.ActionLink("Check-in Time", "Index", new { sortOrder = ViewBag.CheckInTimeSort })
+                @Html.Raw(ViewBag.CheckInTimeSort == "checkInTime_desc" ? " ▼" : " ▲")
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.VehicleType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Make)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Model)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfWheels)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckInTime)
-            </td>
-            <td>
-                <a  class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id">Update</a> |
-                <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Check Out</a>
-            </td>
-        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Make)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfWheels)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckInTime)
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id">Update</a> |
+                    <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Check Out</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+
+
+@model IEnumerable<GarageMVC.Models.ParkedVehicle>
+
+@{
+    ViewData["Title"] = "Index";
 }
+
+
+<h1 class="heading">Parked Vehicles List</h1>
+
+<p>
+    <a class="btn btn-outline-primary" asp-action="Create">Check in Vehicle</a>
+</p>
+<table class="table table-hover">
+    <thead>
+        <tr class="table-primary">
+            <th>
+                @Html.ActionLink("Vehicle Type", "Index", new { sortOrder = ViewBag.VehicleTypeSort })
+                <span class="sort-arrow @(ViewBag.VehicleTypeSort == "vehicleType_desc" ? "desc" : "asc")">
+                    @Html.Raw(ViewBag.VehicleTypeSort == "vehicleType_desc" ? "▼" : "▲")
+                </span>
+            </th>
+            <th>
+                @Html.ActionLink("Registration Number", "Index", new { sortOrder = ViewBag.RegNumberSort })
+                <span class="sort-arrow @(ViewBag.RegNumberSort == "regNumber_desc" ? "desc" : "asc")">
+                    @Html.Raw(ViewBag.RegNumberSort == "regNumber_desc" ? "▼" : "▲")
+                </span>
+            </th>
+            <th>
+                @Html.ActionLink("Color", "Index", new { sortOrder = ViewBag.ColorSort })
+                <span class="sort-arrow @(ViewBag.ColorSort == "color_desc" ? "desc" : "asc")">
+                    @Html.Raw(ViewBag.ColorSort == "color_desc" ? "▼" : "▲")
+                </span>
+            </th>
+            <th>
+                @Html.ActionLink("Make", "Index", new { sortOrder = ViewBag.MakeSort })
+                <span class="sort-arrow @(ViewBag.MakeSort == "make_desc" ? "desc" : "asc")">
+                    @Html.Raw(ViewBag.MakeSort == "make_desc" ? "▼" : "▲")
+                </span>
+            </th>
+            <th>
+                @Html.ActionLink("Model", "Index", new { sortOrder = ViewBag.ModelSort })
+                <span class="sort-arrow @(ViewBag.ModelSort == "model_desc" ? "desc" : "asc")">
+                    @Html.Raw(ViewBag.ModelSort == "model_desc" ? "▼" : "▲")
+                </span>
+            </th>
+            <th>
+                @Html.ActionLink("Number of Wheels", "Index", new { sortOrder = ViewBag.NumberOfWheelsSort })
+                <span class="sort-arrow @(ViewBag.NumberOfWheelsSort == "numberOfWheels_desc" ? "desc" : "asc")">
+                    @Html.Raw(ViewBag.NumberOfWheelsSort == "numberOfWheels_desc" ? "▼" : "▲")
+                </span>
+            </th>
+            <th>
+                @Html.ActionLink("Check-in Time", "Index", new { sortOrder = ViewBag.CheckInTimeSort })
+                <span class="sort-arrow @(ViewBag.CheckInTimeSort == "checkInTime_desc" ? "desc" : "asc")">
+                    @Html.Raw(ViewBag.CheckInTimeSort == "checkInTime_desc" ? "▼" : "▲")
+                </span>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Make)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfWheels)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckInTime)
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id">Update</a> |
+                    <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Check Out</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+

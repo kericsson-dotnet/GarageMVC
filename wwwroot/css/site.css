@@ -25,3 +25,20 @@ body {
     color:black;
 }
 
+
+/* Define CSS styles for sorting arrows */
+.sort-arrow {
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+.sort-arrow.asc {
+    color: cornflowerblue; /* Color for ascending arrow */
+}
+
+.sort-arrow.desc {
+    color: red; /* Color for descending arrow */
+}
+
+
+
