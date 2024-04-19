@@ -13993,7 +13993,7 @@ textarea.form-control-lg {
 }
 
     .sort-arrow.asc {
-        color: blue; /* Color for ascending arrow */
+        color: green; /* Color for ascending arrow */
     }
 
     .sort-arrow.desc {
