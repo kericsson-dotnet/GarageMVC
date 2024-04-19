@@ -13987,3 +13987,15 @@ textarea.form-control-lg {
     color: #343a40;
 }
 
+.sort-arrow {
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+    .sort-arrow.asc {
+        color: blue; /* Color for ascending arrow */
+    }
+
+    .sort-arrow.desc {
+        color: red; /* Color for descending arrow */
+    }
