@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GarageMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GarageMVC.Models;
 
 namespace GarageMVC.Controllers
 {
@@ -122,7 +118,6 @@ namespace GarageMVC.Controllers
         public IActionResult Unpark()
         {
             RegNumberList();
-
             return View();
         }
 
@@ -135,12 +130,49 @@ namespace GarageMVC.Controllers
         public ActionResult RegNumberList()
         {
             var vehicles = _context.ParkedVehicle.ToList();
-            ViewBag.RegNumberSelectList = new SelectList(vehicles, "Id", "RegNumber");
+
+            var selectList = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "Select your vehicle" }
+            };
+
+            foreach (var vehicle in vehicles)
+            {
+                // Visa bara Regnummer i dropdownlistan
+                selectList.Add(new SelectListItem { Value = vehicle.Id.ToString(), Text = vehicle.RegNumber });
+            }
+
+            ViewBag.UnparkSelectList = new SelectList(selectList, "Value", "Text");
 
             ViewBag.SelectedId = -1;
 
             return View();
         }
+
+        public IActionResult UnparkReceipt(int id)
+        {
+            ViewBag.SelectedId = id;
+            CalculateParkingDuration(id);
+            return View();
+        }
+
+        private void CalculateParkingDuration(int id)
+        {
+            var parkedVehicle = _context.ParkedVehicle.Find(id);
+            if (parkedVehicle != null)
+            {
+                TimeSpan duration = DateTime.Now - parkedVehicle.CheckInTime;
+
+                int days = duration.Days;
+                int hours = duration.Hours;
+                int minutes = duration.Minutes;
+
+                ViewBag.Days = days;
+                ViewBag.Hours = hours;
+                ViewBag.Minutes = minutes;
+            }
+        }
+
 
         [HttpPost]
         public ActionResult SeedVehicles()
@@ -158,7 +190,15 @@ namespace GarageMVC.Controllers
                 },
             };
 
-            _context.ParkedVehicle.AddRange(seed);
+            foreach (var vehicle in seed)
+            {
+                // Seeda inte fordonet om det redan finns ett parkerat fordon i db med samma regnummer.
+                if (!_context.ParkedVehicle.Any(v => v.RegNumber == vehicle.RegNumber))
+                {
+                    _context.ParkedVehicle.Add(vehicle);
+                }
+            }
+
             _context.SaveChanges();
 
             return RedirectToAction("Index");
@@ -252,7 +292,6 @@ namespace GarageMVC.Controllers
             {
                 return NotFound();
             }
-
             return View(parkedVehicle);
         }
 
@@ -277,7 +316,7 @@ namespace GarageMVC.Controllers
         // POST: Garage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete2(int id)
         {
             var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
             if (parkedVehicle != null)
