@@ -24,6 +24,8 @@ body {
 }
 
 .custom-container {
+    display: flex;
+    align-items: center;
     width: 315px;
     height: 592px;
     background-image: url('/images/receipt.jpg');
@@ -31,5 +33,14 @@ body {
     background-position: center;
     border: 2px solid black;
     border-radius: 3px;
-    text-align: center;
+}
+
+#parkedTime {
+    margin: auto;
+    padding-top: 6em;
+}
+
+#receipt {
+    margin: auto;
+    padding-top: 9em;
 }

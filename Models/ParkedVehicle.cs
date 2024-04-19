@@ -12,6 +12,8 @@ namespace GarageMVC.Models
     [Index(nameof(RegNumber), IsUnique = true)]
     public class ParkedVehicle
     {
+        internal readonly DateTime checkInTime;
+
         [Key]
         public int Id { get; set; }
 

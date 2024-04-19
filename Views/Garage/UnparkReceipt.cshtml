@@ -1,0 +1,32 @@
+﻿@model GarageMVC.Models.ParkedVehicle
+
+@{
+    ViewData["Title"] = "UnparkReceipt";
+}
+
+<h1>Unpark Vehicle</h1>
+
+<div class="custom-container" id="parkingTimeContainer">
+    <div id="parkedTime">
+        <p>Days: @ViewBag.Days</p>
+        <p>Hours: @ViewBag.Hours</p>
+        <p>Minutes: @ViewBag.Minutes</p>
+    </div>
+
+    <div id="receipt">
+        <form id="receiptForm" asp-controller="Garage" asp-action="Delete" method="post">
+            <input type="hidden" name="id" value="@ViewBag.SelectedId">
+            <button type="submit" id="ReceiptButton" class="btn btn-primary">OK</button>
+        </form>
+    </div>
+</div>
+
+
+@*     <div id="receipt">
+        <form id="receiptForm" asp-controller="Garage" asp-action="Delete" method="post">
+            <input type="hidden" name="id" value="@ViewBag.VehicleId" />
+            <button type="submit" id="ReceiptButton" class="btn btn-primary">OK</button>
+        </form>
+    </div> *@
+
+</div>

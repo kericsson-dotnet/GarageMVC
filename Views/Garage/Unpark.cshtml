@@ -6,20 +6,52 @@
 
 <h1>Unpark Vehicle</h1>
 
+
 <div>
-    <form id="unparkForm" asp-controller="Garage" asp-action="Delete" method="post">
+    <form id="unparkForm" asp-controller="Garage" asp-action="UnparkReceipt" method="post">
         <select id="selectedId" name="Id" asp-items="@ViewBag.UnparkSelectList"></select>
         <input type="submit" value="Unpark" class="btn btn-primary" />
     </form>
 </div>
 
-@* Här ska ParkingTime in (lägg till logik att räkna ut parkerad tid) *@
-<div class="custom-container" id="parkingTimeContainer">  
+@* <div>
+    <form id="unparkForm" asp-controller="Garage" asp-action="ShowReceiptButton" method="post">
+        <select id="selectedId" name="id" asp-items="@ViewBag.UnparkSelectList"></select>
+        <input type="submit" value="Unpark" class="btn btn-primary" />
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="custom-container" id="parkingTimeContainer">
+    @if (!string.IsNullOrEmpty(ViewBag.ParkingDuration))
+    {
+        <p>@ViewBag.ParkingDuration</p>
+    }
 </div>
+
+<div class="custom-container" id="receiptButtonContainer" style="display: @(ViewBag.ShowButton ? "block" : "none")">
+    <form id="receiptForm" asp-controller="Garage" asp-action="Delete" method="post">
+        <input type="hidden" name="id" value="@ViewBag.VehicleId" />
+        <button type="submit" id="ReceiptButton" class="btn btn-danger">OK</button>
+    </form>
+</div>
+
+
+<p>@ViewBag.ParkingDuration</p>
+
+<div>
+    <form id="unparkForm" asp-controller="Garage" asp-action="Delete2" method="post">
+        <select id="selectedId" name="Id" asp-items="@ViewBag.UnparkSelectList"></select>
+        <input type="submit" value="Unpark" class="btn btn-primary" />
+    </form>
+</div>
+
+<div class="custom-container" id="parkingTimeContainer">
+    @if (ViewBag.ParkingDuration != null)
+    {
+        <p>@ViewBag.ParkingDuration</p>
+    }
+</div> *@
+
 
 
 
