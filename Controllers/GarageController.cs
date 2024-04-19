@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GarageMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GarageMVC.Models;
 
 namespace GarageMVC.Controllers
 {
@@ -16,17 +12,6 @@ namespace GarageMVC.Controllers
         public GarageController(GarageContext context)
         {
             _context = context;
-        }
-
-        public ActionResult Index2()
-        {
-            // Retrieve data from the database
-            var data = _context
-
-            // Pass the data to the view
-            ViewBag.YourData = new SelectList(data, "Id", "Name");
-
-            return View();
         }
 
         public async Task<IActionResult> CheckInVehicle(string regNumber)
@@ -88,12 +73,25 @@ namespace GarageMVC.Controllers
         public ActionResult RegNumberList()
         {
             var vehicles = _context.ParkedVehicle.ToList();
-            ViewBag.RegNumberSelectList = new SelectList(vehicles, "Id", "RegNumber");
+
+            var selectList = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "Select your vehicle" }
+            };
+
+            foreach (var vehicle in vehicles)
+            {
+                // Visa bara Regnummer i dropdownlistan
+                selectList.Add(new SelectListItem { Value = vehicle.Id.ToString(), Text = vehicle.RegNumber });
+            }
+
+            ViewBag.UnparkSelectList = new SelectList(selectList, "Value", "Text");
 
             ViewBag.SelectedId = -1;
 
             return View();
         }
+
 
         [HttpPost]
         public ActionResult SeedVehicles()
@@ -111,7 +109,15 @@ namespace GarageMVC.Controllers
                 },
             };
 
-            _context.ParkedVehicle.AddRange(seed);
+            foreach (var vehicle in seed)
+            {
+                // Seeda inte fordonet om det redan finns ett parkerat fordon i db med samma regnummer.
+                if (!_context.ParkedVehicle.Any(v => v.RegNumber == vehicle.RegNumber))
+                {
+                    _context.ParkedVehicle.Add(vehicle);
+                }
+            }
+
             _context.SaveChanges();
 
             return RedirectToAction("Index");

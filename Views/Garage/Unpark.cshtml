@@ -7,14 +7,9 @@
 <h1>Unpark Vehicle</h1>
 
 <div>
-    <span>
-        @Html.DropDownList("Id", (SelectList)ViewBag.RegNumberSelectList, "Select a Vehicle", new { @onchange = "updateSelectedId(this)" })
-    </span>
-
-    @* "selectedId" är Id tillhörade respektive regnummer, endast regnummer visas*@
     <form id="unparkForm" asp-controller="Garage" asp-action="Delete" method="post">
-        <input type="hidden" id="selectedId" name="Id" value="@ViewBag.SelectedId" />
-        <input type="submit" value="Unpark" class="btn btn-danger" />
+        <select id="selectedId" name="Id" asp-items="@ViewBag.UnparkSelectList"></select>
+        <input type="submit" value="Unpark" class="btn btn-primary" />
     </form>
 </div>
 
@@ -26,14 +21,6 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-
-@* Uppatera selectedId efter val *@
-<script>
-    function updateSelectedId(select) {
-        var selectedId = select.options[select.selectedIndex].value;
-        document.getElementById('selectedId').value = selectedId;
-    }
-</script>
 
 
 
