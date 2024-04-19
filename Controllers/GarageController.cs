@@ -60,7 +60,6 @@ namespace GarageMVC.Controllers
         public IActionResult Unpark()
         {
             RegNumberList();
-            //ViewBag.ShowButton = false;
             return View();
         }
 
@@ -99,24 +98,6 @@ namespace GarageMVC.Controllers
             return View();
         }
 
-        //public ActionResult ShowReceiptButton(int id)
-        //{
-        //    //CalculateParkingDuration(id);
-        //    ViewBag.VehicleId = id;
-        //    ViewBag.ShowButton = true;
-
-        //    return View("Unpark");
-        //}
-
-        //private void CalculateParkingDuration(int id)
-        //{
-        //    var parkedVehicle = _context.ParkedVehicle.Find(id);
-        //    if (parkedVehicle != null)
-        //    {
-        //        TimeSpan duration = DateTime.Now - parkedVehicle.CheckInTime;
-        //        ViewBag.ParkingDuration = duration!;
-        //    }
-        //}
         private void CalculateParkingDuration(int id)
         {
             var parkedVehicle = _context.ParkedVehicle.Find(id);
