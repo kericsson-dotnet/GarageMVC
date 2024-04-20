@@ -298,19 +298,18 @@ namespace GarageMVC.Controllers
         public IActionResult Search(string searchValue)
         {
             List<ParkedVehicle> searchVehicles = new List<ParkedVehicle>();
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
-
             foreach (var vehicle in _context.ParkedVehicle)
             {
                 string text = vehicle.VehicleType.ToString().ToLower();
                 if (text.Contains(searchValue.ToLower())) searchVehicles.Add(vehicle);
             }
-
-            return View("Index", searchVehicles);
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
+            var searchList = searchVehicles.Distinct().ToArray();
+            return View("Index", searchList);
         }
 
         // POST: Garage/Delete/5
