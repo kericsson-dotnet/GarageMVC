@@ -71,7 +71,7 @@ namespace GarageMVC.Controllers
 
         public ActionResult RegNumberList()
         {
-            var vehicles = _context.ParkedVehicle.ToList();
+            var vehicles = _context.ParkedVehicle.OrderBy(v => v.RegNumber).ToList();
 
             var selectList = new List<SelectListItem>
             {
