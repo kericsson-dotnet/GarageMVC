@@ -33,11 +33,69 @@ namespace GarageMVC.Controllers
 
         }
 
-        // GET: Garage
-        public async Task<IActionResult> Index()
+        
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.ParkedVehicle.ToListAsync());
+            ViewData["VehicleTypeSort"] = string.IsNullOrEmpty(sortOrder) ? "vehicleType_desc" : "";
+            ViewData["RegNumberSort"] = sortOrder == "regNumber" ? "regNumber_desc" : "regNumber";
+            ViewData["ColorSort"] = sortOrder == "color" ? "color_desc" : "color";
+            ViewData["MakeSort"] = sortOrder == "make" ? "make_desc" : "make";
+            ViewData["ModelSort"] = sortOrder == "model" ? "model_desc" : "model";
+            ViewData["NumberOfWheelsSort"] = sortOrder == "numberOfWheels" ? "numberOfWheels_desc" : "numberOfWheels";
+            ViewData["CheckInTimeSort"] = sortOrder == "checkInTime" ? "checkInTime_desc" : "checkInTime";
+
+            var vehicles = from v in _context.ParkedVehicle
+                           select v;
+
+            switch (sortOrder)
+            {
+                case "vehicleType_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.VehicleType);
+                    break;
+                case "regNumber":
+                    vehicles = vehicles.OrderBy(v => v.RegNumber);
+                    break;
+                case "regNumber_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.RegNumber);
+                    break;
+                case "color":
+                    vehicles = vehicles.OrderBy(v => v.Color);
+                    break;
+                case "color_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.Color);
+                    break;
+                case "make":
+                    vehicles = vehicles.OrderBy(v => v.Make);
+                    break;
+                case "make_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.Make);
+                    break;
+                case "model":
+                    vehicles = vehicles.OrderBy(v => v.Model);
+                    break;
+                case "model_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.Model);
+                    break;
+                case "numberOfWheels":
+                    vehicles = vehicles.OrderBy(v => v.NumberOfWheels);
+                    break;
+                case "numberOfWheels_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.NumberOfWheels);
+                    break;
+                case "checkInTime":
+                    vehicles = vehicles.OrderBy(v => v.CheckInTime);
+                    break;
+                case "checkInTime_desc":
+                    vehicles = vehicles.OrderByDescending(v => v.CheckInTime);
+                    break;
+                default:
+                    vehicles = vehicles.OrderBy(v => v.RegNumber); // Default sorting by registration number
+                    break;
+            }
+
+            return View(await vehicles.ToListAsync());
         }
+
 
         // GET: Garage/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -153,11 +211,18 @@ namespace GarageMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels,ParkingTime,IsParked")] ParkedVehicle parkedVehicle)
         {
-            if (ModelState.IsValid)
+            TempData["Message"] = "";
+
+            if (ModelState.IsValid && !ParkedVehicleExistsByReg(parkedVehicle.RegNumber))
             {
                 _context.Add(parkedVehicle);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber +" parked successfully!";
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber + " already parked!";
             }
             return View(parkedVehicle);
         }
@@ -230,6 +295,24 @@ namespace GarageMVC.Controllers
             return View(parkedVehicle);
         }
 
+        public IActionResult Search(string searchValue)
+        {
+            List<ParkedVehicle> searchVehicles = new List<ParkedVehicle>();
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
+
+            foreach (var vehicle in _context.ParkedVehicle)
+            {
+                string text = vehicle.VehicleType.ToString().ToLower();
+                if (text.Contains(searchValue.ToLower())) searchVehicles.Add(vehicle);
+            }
+
+            return View("Index", searchVehicles);
+        }
+
         // POST: Garage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -248,6 +331,11 @@ namespace GarageMVC.Controllers
         private bool ParkedVehicleExists(int id)
         {
             return _context.ParkedVehicle.Any(e => e.Id == id);
+        }
+
+        private bool ParkedVehicleExistsByReg(String RegNo)
+        {
+            return _context.ParkedVehicle.Any(v => v.RegNumber == RegNo);
         }
     }
 }

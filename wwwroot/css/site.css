@@ -23,6 +23,10 @@ body {
   margin-bottom: 60px;
 }
 
+#searchBox {
+    color:black;
+}
+
 .custom-container {
     display: flex;
     align-items: center;
