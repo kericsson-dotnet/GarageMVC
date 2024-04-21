@@ -10,9 +10,9 @@
     <a class="btn btn-outline-primary" asp-action="Create">Park</a>
 </p>
 
-
 <p>
-    <a href="@Url.Action("Unpark", "Garage")" class="btn btn-primary">Unpark Vehicle</a>
+@*  Lagt till så att knappen är utgråd om garaget inte har några parkerade fordon. Blå knanpp om det finns fordon. *@
+    <a href="@Url.Action("Unpark", "Garage")" class="btn @(ViewBag.IsDbEmpty ? "btn-secondary" : "btn-primary")">Unpark Vehicle</a>
 </p>
 
 <p>
