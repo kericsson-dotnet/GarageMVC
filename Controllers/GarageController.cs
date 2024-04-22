@@ -58,11 +58,12 @@ namespace GarageMVC.Controllers
 
         }
         // Method to calculate parking fee for a specific vehicle
-        private decimal CalculateParkingFee(DateTime? checkInTime)
+        private decimal CalculateParkingFee(ParkedVehicle vehicle)
         {
-            if (checkInTime.HasValue)
+            int occupiedSlots = (int)vehicle.VehicleType;
+            if (vehicle.CheckInTime != DateTime.MinValue)
             {
-                TimeSpan parkingDuration = DateTime.Now - checkInTime.Value;
+                TimeSpan parkingDuration = DateTime.Now - vehicle.CheckInTime;
                 double totalHours = Math.Ceiling(parkingDuration.TotalHours);
 
                 decimal parkingFee = (decimal)totalHours * hourlyRate;
@@ -81,7 +82,7 @@ namespace GarageMVC.Controllers
 
             foreach (var vehicle in parkedVehicles)
             {
-                totalFees += CalculateParkingFee(vehicle.CheckInTime);
+                totalFees += CalculateParkingFee(vehicle);
             }
 
             return totalFees;
