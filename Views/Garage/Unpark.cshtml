@@ -1,0 +1,21 @@
+﻿@model GarageMVC.Models.ParkedVehicle
+
+@{
+    ViewData["Title"] = "Unpark";
+}
+
+<h1>Unpark Vehicle</h1>
+
+
+<div>
+    <form id="unparkForm" asp-controller="Garage" asp-action="UnparkReceipt" method="post">
+        <select id="selectedId" name="Id" asp-items="@ViewBag.UnparkSelectList"></select>
+        <input type="submit" value="Unpark" class="btn btn-primary" />
+    </form>
+</div>
+
+
+
+
+
+
