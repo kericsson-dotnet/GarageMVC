@@ -4,20 +4,33 @@
     ViewData["Title"] = "UnparkReceipt";
 }
 
-<h1>Unpark Vehicle</h1>
-
-<div class="custom-container" id="parkingTimeContainer">
-    <div id="parkedTime">
-        <p>Days: @ViewBag.Days</p>
-        <p>Hours: @ViewBag.Hours</p>
-        <p>Minutes: @ViewBag.Minutes</p>
-    </div>
-
-    <div id="receipt">
-        <form id="receiptForm" asp-controller="Garage" asp-action="Delete" method="post">
-            <input type="hidden" name="id" value="@ViewBag.SelectedId">
-            <button type="submit" id="ReceiptButton" class="btn btn-primary">OK</button>
-        </form>
-    </div>
+<div class="custom-container2">
+    <h1>Unpark Vehicle</h1>
 </div>
 
+ 
+<div class="custom-container">
+    <div id="parkedTime">
+
+@*      Lagt till så att om någon av Days/Hours/Minutes har värdet 0 så visas varken dess text eller "0" *@
+        @if (ViewBag.Days != 0)
+        {
+            <p>Days: @ViewBag.Days</p>
+        }
+        @if (ViewBag.Hours != 0)
+        {
+            <p>Hours: @ViewBag.Hours</p>
+        }
+        @if (ViewBag.Minutes != 0)
+        {
+            <p>Minutes: @ViewBag.Minutes</p>
+        }
+        <p>Fixa så fonten fungerar!: @ViewBag.TotalSum</p>
+    </div>
+</div>
+<div class="custom-container2">
+<form id="receiptForm" asp-controller="Garage" asp-action="Delete" method="post">
+    <input type="hidden" name="id" value="@ViewBag.SelectedId">
+    <button type="submit" id="ReceiptButton" class="btn btn-primary">OK</button>
+</form>
+</div>

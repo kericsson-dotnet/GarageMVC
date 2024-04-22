@@ -23,7 +23,8 @@ namespace GarageMVC.Migrations
                     Make = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Model = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     NumberOfWheels = table.Column<int>(type: "int", nullable: true),
-                    CheckInTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CheckInTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Slot = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

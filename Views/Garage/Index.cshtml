@@ -4,16 +4,15 @@
     ViewData["Title"] = "Index";
 }
 
-
-<h1 class="heading">Parked Vehicles List</h1>
+<h1 class="heading">Garage v1.0</h1>
 
 <p>
-    <a class="btn btn-outline-primary" asp-action="Create">Check in Vehicle</a>
+    <a class="btn btn-outline-primary" asp-action="Create">Park</a>
 </p>
 
-
 <p>
-    <a href="@Url.Action("Unpark", "Garage")" class="btn btn-primary">Unpark Vehicle</a>
+@*  Lagt till så att knappen är utgråd om garaget inte har några parkerade fordon. Blå knanpp om det finns fordon. *@
+    <a href="@Url.Action("Unpark", "Garage")" class="btn @(ViewBag.IsDbEmpty ? "btn-secondary" : "btn-primary")">Unpark Vehicle</a>
 </p>
 
 <p>
@@ -119,6 +118,20 @@
 <h2>Bus = @ViewData["BusAmount"]</h2>
 <h2>Truck = @ViewData["TruckAmount"]</h2>
 <h2>Airplan = @ViewData["AirplanAmount"]</h2>
+
+<h2>Garage Slots</h2>
+
+<ul>
+    @foreach (var slot in @ViewBag.GarageSlots)
+    {
+        if (slot == null)
+        {
+            <li>Empty</li>
+            continue;
+        }
+        <li>@slot.RegNumber</li>
+    }
+</ul>
 
 @section Scripts {
     @{

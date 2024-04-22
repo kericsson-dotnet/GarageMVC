@@ -51,6 +51,9 @@ namespace GarageMVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Slot")
+                        .HasColumnType("int");
+
                     b.Property<int>("VehicleType")
                         .HasColumnType("int");
 

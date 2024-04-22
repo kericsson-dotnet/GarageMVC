@@ -38,6 +38,6 @@ namespace GarageMVC.Models
 
         public DateTime CheckInTime { get; set; } = DateTime.Now;
         
-
+        public int Slot { get; set; }
     }
 }

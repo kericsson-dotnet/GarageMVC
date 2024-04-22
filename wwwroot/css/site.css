@@ -10,6 +10,14 @@ html {
   }
 }
 
+@font-face {
+    font-family: 'wrabbit';
+    src: url('/fonts/white-rabbit.TTF') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
@@ -28,6 +36,7 @@ body {
 }
 
 .custom-container {
+    font-family: 'wrabbit', sans-serif;
     display: flex;
     align-items: center;
     width: 315px;
@@ -39,12 +48,15 @@ body {
     border-radius: 3px;
 }
 
-#parkedTime {
-    margin: auto;
-    padding-top: 6em;
+.custom-container2 {
+    padding-top: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 315px;
 }
 
-#receipt {
+#parkedTime {
     margin: auto;
-    padding-top: 9em;
+    padding-top: 8em;
 }
