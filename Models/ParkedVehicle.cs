@@ -8,6 +8,8 @@ namespace GarageMVC.Models
         Car,
         Motorcycle,
         Bus,
+        Airplan,
+        Truck,
     }
     [Index(nameof(RegNumber), IsUnique = true)]
     public class ParkedVehicle

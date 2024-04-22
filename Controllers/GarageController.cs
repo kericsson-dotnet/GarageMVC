@@ -10,6 +10,12 @@ namespace GarageMVC.Controllers
     public class GarageController : Controller
     {
         private readonly GarageContext _context;
+        private static readonly int fixedParkNumber = 60;
+        private int car;
+        private int truck;
+        private int bus;
+        private int motorcycle;
+        private int airplan;
 
         // Nytillagd variabel
         public bool IsDbEmpty { get; }
@@ -40,7 +46,7 @@ namespace GarageMVC.Controllers
 
         }
 
-        
+
         public async Task<IActionResult> Index(string sortOrder)
         {
             ViewBag.IsDbEmpty = IsDbEmpty;
@@ -51,6 +57,16 @@ namespace GarageMVC.Controllers
             ViewData["ModelSort"] = sortOrder == "model" ? "model_desc" : "model";
             ViewData["NumberOfWheelsSort"] = sortOrder == "numberOfWheels" ? "numberOfWheels_desc" : "numberOfWheels";
             ViewData["CheckInTimeSort"] = sortOrder == "checkInTime" ? "checkInTime_desc" : "checkInTime";
+            int parkNumber = CalcEmptyPark();
+            ViewData["Airplan"] = parkNumber / 3;
+            ViewData["Bus"] = parkNumber / 2;
+            ViewData["Car"] = parkNumber;
+
+            ViewData["CarAmount"] = car;
+            ViewData["TruckAmount"] = truck;
+            ViewData["BusAmount"] = bus;
+            ViewData["MotorcycleAmount"] = motorcycle;
+            ViewData["AirplanAmount"] = airplan;
 
             var vehicles = from v in _context.ParkedVehicle
                            select v;
@@ -247,7 +263,7 @@ namespace GarageMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels,ParkingTime,IsParked")] ParkedVehicle parkedVehicle)
+        public async Task<IActionResult> Create([Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels")] ParkedVehicle parkedVehicle)
         {
             TempData["Message"] = "";
 
@@ -255,7 +271,8 @@ namespace GarageMVC.Controllers
             {
                 _context.Add(parkedVehicle);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber +" parked successfully!";
+                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber + " parked successfully!";
+                string test = parkedVehicle.VehicleType.ToString();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -336,19 +353,18 @@ namespace GarageMVC.Controllers
         public IActionResult Search(string searchValue)
         {
             List<ParkedVehicle> searchVehicles = new List<ParkedVehicle>();
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
-
             foreach (var vehicle in _context.ParkedVehicle)
             {
                 string text = vehicle.VehicleType.ToString().ToLower();
                 if (text.Contains(searchValue.ToLower())) searchVehicles.Add(vehicle);
             }
-
-            return View("Index", searchVehicles);
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
+            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
+            var searchList = searchVehicles.Distinct().ToArray();
+            return View("Index", searchList);
         }
 
         // POST: Garage/Delete/5
@@ -365,6 +381,22 @@ namespace GarageMVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        private int CalcEmptyPark()
+        {
+            foreach (var vehicle in _context.ParkedVehicle)
+            {
+                String typeVehicle = vehicle.VehicleType.ToString();
+                if (typeVehicle.Equals("Car")) car = car + 1;
+                else if (typeVehicle.Equals("Motorcycle")) motorcycle = motorcycle + 1;
+                else if (typeVehicle.Equals("Bus")) bus = bus + 1;
+                else if (typeVehicle.Equals("Truck")) truck = truck + 1;
+                else airplan = airplan + 1;
+            }
+            return fixedParkNumber - car - motorcycle - (bus * 2) - (truck * 2) - (airplan * 3);
+        }
+
+
 
         private bool ParkedVehicleExists(int id)
         {
