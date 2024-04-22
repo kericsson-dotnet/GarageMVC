@@ -12,7 +12,7 @@ html {
 
 @font-face {
     font-family: 'wrabbit';
-    src: url('/fonts/white-rabbit.TTF') format('truetype');
+    src: url('/fonts/Sixtyfour-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -56,7 +56,37 @@ body {
     width: 315px;
 }
 
+.custom-container3 {
+    margin-top: 3em;
+    margin-bottom: 1em;
+}
+
 #parkedTime {
     margin: auto;
     padding-top: 8em;
+}
+
+.mb-Park {
+    padding-right: 10px;
+}
+
+.mb-Seed {
+    padding-left: 10px;
+}
+.empty-slot {
+  background-color: #73a839;
+}
+
+.occupied-slot {
+  background-color: grey;
+}
+.garage-grid {
+  border-collapse: separate;
+  border-spacing: 10px; /* Adjust the spacing as needed */
+  width: 100%; /* Adjust the width as needed */
+}
+
+.garage-grid td {
+  border: 1px solid #aaaaaa;
+  padding: 0.5rem;
 }

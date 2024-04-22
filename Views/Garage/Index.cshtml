@@ -32,7 +32,7 @@
                 </span>
             </th>
             <th>
-                @Html.ActionLink("Registration Number", "Index", new { sortOrder = ViewBag.RegNumberSort })
+                @Html.ActionLink("Number Plate", "Index", new { sortOrder = ViewBag.RegNumberSort })
                 <span class="sort-arrow @(ViewBag.RegNumberSort == "regNumber_desc" ? "desc" : "asc")">
                     @Html.Raw(ViewBag.RegNumberSort == "regNumber_desc" ? "▼" : "▲")
                 </span>
@@ -56,7 +56,7 @@
                 </span>
             </th>
             <th>
-                @Html.ActionLink("Number of Wheels", "Index", new { sortOrder = ViewBag.NumberOfWheelsSort })
+                @Html.ActionLink("Wheels", "Index", new { sortOrder = ViewBag.NumberOfWheelsSort })
                 <span class="sort-arrow @(ViewBag.NumberOfWheelsSort == "numberOfWheels_desc" ? "desc" : "asc")">
                     @Html.Raw(ViewBag.NumberOfWheelsSort == "numberOfWheels_desc" ? "▼" : "▲")
                 </span>
@@ -93,45 +93,92 @@
                     @Html.DisplayFor(modelItem => item.NumberOfWheels)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CheckInTime)
+                    @Html.DisplayFor(modelItem => item.CheckInTime)                   
                 </td>
                 <td>
-                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id">Update</a> |
-                    <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id">Update</a>
+                    <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@item.Id">Details</a>
                     <a class="btn btn-outline-danger" asp-action="UnparkReceipt" asp-route-id="@item.Id">Unpark</a>
                 </td>
+@*                 <td class="text-right">
+                    <div class="btn-group">
+                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id">Update</a>
+                        <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a class="btn btn-outline-danger" asp-action="UnparkReceipt" asp-route-id="@item.Id">Unpark</a>
+                    </div>
+                </td> *@
             </tr>
         }
     </tbody>
 </table>
 
-<h2>Available empty parking for:</h2>
-<h2>Car = @ViewData["Car"]</h2>
-<h2>Motorcycle = @ViewData["Car"]</h2>
-<h2>Bus = @ViewData["Bus"]</h2>
-<h2>Truck = @ViewData["Bus"]</h2>
-<h2>Airplan = @ViewData["Airplan"]</h2>
+<div class="container">
+ @*  <h2 class="my-3" style="color:#007bff; font-size: 24px;">Parking Update</h2> *@
+    <div class="row mt-4">
 
-<h2>All parking</h2>
-<h2>Car = @ViewData["CarAmount"]</h2>
-<h2>Motorcycle = @ViewData["MotorcycleAmount"]</h2>
-<h2>Bus = @ViewData["BusAmount"]</h2>
-<h2>Truck = @ViewData["TruckAmount"]</h2>
-<h2>Airplan = @ViewData["AirplanAmount"]</h2>
+        <div class="col-md-6">
+            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Cars= @ViewData["CarAmount"]</h4>
+                    <h4>Available P = @ViewData["Car"]</h4>
+                </div>
+            </div>
+            <div class="card bg-secondary mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Motorcycle = @ViewData["Motorcycle"]</h4>
+                    <h4>Available P = @ViewData["Motorcycle"]</h4>
+                </div>
+            </div>
+            <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Bus = @ViewData["Bus"]</h4>
+                    <h4>Available P= @ViewData["Bus"]</h4>
 
-<h2>Garage Slots</h2>
-
-<ul>
-    @foreach (var slot in @ViewBag.GarageSlots)
+                </div>
+            </div>
+            <div class="card text-white bg-danger mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Trucks = @ViewData["Truck"]</h4>
+                    <h4>Available P = @ViewData["Truck"]</h4>
+                </div>
+            </div>
+            <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Airplane = @ViewData["Airplane"]</h4>
+                    <h4>Available P = @ViewData["Airplane"]</h4>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</div>
+<table class="garage-grid">
+    @for (int i = 0; i < ViewBag.GarageSlots.Count; i++)
     {
-        if (slot == null)
+        if (i % 12 == 0)
         {
-            <li>Empty</li>
-            continue;
+            @:<tr>
         }
-        <li>@slot.RegNumber</li>
+        var slot = ViewBag.GarageSlots[i];
+        <td class="@(slot == null || slot.Count == 0 ? "empty-slot" : "occupied-slot")">
+            @if (slot == null || slot.Count == 0)
+            {
+                @:Empty
+            }
+            else
+            {
+                foreach (var vehicle in slot)
+                {
+                    <div>@vehicle.RegNumber</div>
+                }
+            }
+        </td>
+        if ((i + 1) % 12 == 0)
+        {
+            @:</tr>
+        }
     }
-</ul>
+</table>
 
 @section Scripts {
     @{

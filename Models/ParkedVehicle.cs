@@ -8,9 +8,29 @@ namespace GarageMVC.Models
         Car,
         Motorcycle,
         Bus,
-        Airplan,
+        Airplane,
         Truck,
     }
+    public static class VehicleTypeExtensions
+    {
+        public static int GetNumberOfSlots(this VehicleType vehicleType)
+        {
+            switch (vehicleType)
+            {
+                case VehicleType.Motorcycle:
+                case VehicleType.Car:
+                    return 1;
+                case VehicleType.Truck:
+                case VehicleType.Bus:
+                    return 2;
+                case VehicleType.Airplane:
+                    return 3;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(vehicleType), vehicleType, null);
+            }
+        }
+    }
+
     [Index(nameof(RegNumber), IsUnique = true)]
     public class ParkedVehicle
     {
@@ -37,7 +57,7 @@ namespace GarageMVC.Models
         public int? NumberOfWheels { get; set; }
 
         public DateTime CheckInTime { get; set; } = DateTime.Now;
-        
+
         public int Slot { get; set; }
     }
 }
