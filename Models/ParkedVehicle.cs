@@ -37,5 +37,7 @@ namespace GarageMVC.Models
         public int? NumberOfWheels { get; set; }
 
         public DateTime CheckInTime { get; set; } = DateTime.Now;
+        
+
     }
 }
