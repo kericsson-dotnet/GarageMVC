@@ -10,7 +10,7 @@ namespace GarageMVC.Controllers
     public class GarageController : Controller
     {
         private readonly GarageContext _context;
-        private static readonly int fixedParkNumber = 20;
+        private static readonly int fixedParkNumber = 24;
         private int car;
         private int truck;
         private int bus;
@@ -19,7 +19,7 @@ namespace GarageMVC.Controllers
 
         public const decimal hourlyRate = 1.23m;
 
-        public List<ParkedVehicle?> GarageSlots { get; set; }
+        public List<List<ParkedVehicle?>> GarageSlots { get; set; }
         // Nytillagd variabel
         public bool IsDbEmpty { get; }
 
@@ -28,16 +28,24 @@ namespace GarageMVC.Controllers
             _context = context;
 
             IsDbEmpty = !_context.ParkedVehicle.Any();
-            GarageSlots = new List<ParkedVehicle?>(new ParkedVehicle?[fixedParkNumber]);
+            GarageSlots = new List<List<ParkedVehicle?>>(new List<ParkedVehicle?>[fixedParkNumber]);
 
             foreach (var vehicle in _context.ParkedVehicle)
             {
-                for (int i = 0; i < (int)vehicle.VehicleType; i++)
+                for (int i = 0; i < vehicle.VehicleType.GetNumberOfSlots(); i++)
                 {
-                GarageSlots[vehicle.Slot - 1 + i] = vehicle;
+                    if (GarageSlots[vehicle.Slot - 1 + i] == null)
+                    {
+                        GarageSlots[vehicle.Slot - 1 + i] = new List<ParkedVehicle?> { vehicle };
+                    }
+                    else
+                    {
+                        GarageSlots[vehicle.Slot - 1 + i].Add(vehicle);
+                    }
                 }
             }
         }
+
 
         public async Task<IActionResult> CheckInVehicle(string regNumber)
         {
@@ -60,13 +68,13 @@ namespace GarageMVC.Controllers
         // Method to calculate parking fee for a specific vehicle
         private decimal CalculateParkingFee(ParkedVehicle vehicle)
         {
-            int occupiedSlots = (int)vehicle.VehicleType;
+            int occupiedSlots = vehicle.VehicleType.GetNumberOfSlots();
             if (vehicle.CheckInTime != DateTime.MinValue)
             {
                 TimeSpan parkingDuration = DateTime.Now - vehicle.CheckInTime;
                 double totalHours = Math.Ceiling(parkingDuration.TotalHours);
 
-                decimal parkingFee = (decimal)totalHours * hourlyRate;
+                decimal parkingFee = (decimal)totalHours * occupiedSlots * hourlyRate;
 
                 return parkingFee;
             }
@@ -497,20 +505,31 @@ namespace GarageMVC.Controllers
 
         private int ClaimNextAvailableSlot(VehicleType vehicleType)
         {
-            var requiredSlots = (int)vehicleType;
+            var requiredSlots = vehicleType.GetNumberOfSlots();
             lock (lockObject)
             {
+                if (vehicleType == VehicleType.Motorcycle)
+                {
+                    // Check for any slot with motorcycles and less than 3 motorcycles
+                    for (int i = 0; i < GarageSlots.Count; i++)
+                    {
+                        if (GarageSlots[i] != null && GarageSlots[i].Count < 3 && GarageSlots[i][0].VehicleType == VehicleType.Motorcycle)
+                        {
+                            GarageSlots[i].Add(new ParkedVehicle()); // Add the motorcycle to the slot
+                            return i;
+                        }
+                    }
+                }
+
                 for (int i = 0; i <= GarageSlots.Count - requiredSlots; i++)
                 {
-                    // Check if there are enough contiguous null slots
+                    // Check if there are enough null slots in a row
                     if (Enumerable.Range(i, requiredSlots).All(j => GarageSlots[j] == null))
                     {
-                        // Reserve the slots
                         for (int j = i; j < i + requiredSlots; j++)
                         {
-                            GarageSlots[j] = new ParkedVehicle(); // Placeholder
+                            GarageSlots[j] = new List<ParkedVehicle?> { new ParkedVehicle() }; // Reserve the slot
                         }
-
                         return i;
                     }
                 }

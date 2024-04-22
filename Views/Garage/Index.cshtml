@@ -150,23 +150,6 @@
             </div>
         </div>
        
-        <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
-            <div class="card-body">
-               <h2>Garage Slots</h2>
-
-                <ul>
-                    @foreach (var slot in @ViewBag.GarageSlots)
-                    {
-                        if (slot == null)
-                        {
-                            <li>Empty</li>
-                            continue;
-                        }
-                        <li>@slot.RegNumber</li>
-                    }
-                </ul>
-            </div>
-        </div>
     </div>
 </div>
 <table class="garage-grid">
@@ -177,8 +160,18 @@
             @:<tr>
         }
         var slot = ViewBag.GarageSlots[i];
-        <td class="@(slot == null ? "empty-slot" : "occupied-slot")">
-            @(slot == null ? "Empty" : slot.RegNumber)
+        <td class="@(slot == null || slot.Count == 0 ? "empty-slot" : "occupied-slot")">
+            @if (slot == null || slot.Count == 0)
+            {
+                @:Empty
+            }
+            else
+            {
+                foreach (var vehicle in slot)
+                {
+                    <div>@vehicle.RegNumber</div>
+                }
+            }
         </td>
         if ((i + 1) % 12 == 0)
         {
