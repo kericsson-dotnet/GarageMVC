@@ -11,7 +11,7 @@
 </p>
 
 <p>
-@*  Lagt till så att knappen är utgråd om garaget inte har några parkerade fordon. Blå knanpp om det finns fordon. *@
+    @*  Lagt till så att knappen är utgråd om garaget inte har några parkerade fordon. Blå knanpp om det finns fordon. *@
     <a href="@Url.Action("Unpark", "Garage")" class="btn @(ViewBag.IsDbEmpty ? "btn-secondary" : "btn-primary")">Unpark Vehicle</a>
 </p>
 
@@ -105,34 +105,63 @@
     </tbody>
 </table>
 
-<h2>Available empty parking for:</h2>
-<h2>Car = @ViewData["Car"]</h2>
-<h2>Motorcycle = @ViewData["Car"]</h2>
-<h2>Bus = @ViewData["Bus"]</h2>
-<h2>Truck = @ViewData["Bus"]</h2>
-<h2>Airplan = @ViewData["Airplan"]</h2>
+<div class="container">
+ @*  <h2 class="my-3" style="color:#007bff; font-size: 24px;">Parking Update</h2> *@
+    <div class="row mt-4">
 
-<h2>All parking</h2>
-<h2>Car = @ViewData["CarAmount"]</h2>
-<h2>Motorcycle = @ViewData["MotorcycleAmount"]</h2>
-<h2>Bus = @ViewData["BusAmount"]</h2>
-<h2>Truck = @ViewData["TruckAmount"]</h2>
-<h2>Airplan = @ViewData["AirplanAmount"]</h2>
+        <div class="col-md-6">
+            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Cars= @ViewData["CarAmount"]</h4>
+                    <h4>Available P = @ViewData["Car"]</h4>
+                </div>
+            </div>
+            <div class="card bg-secondary mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Motorcycle = @ViewData["Motorcycle"]</h4>
+                    <h4>Available P = @ViewData["Motorcycle"]</h4>
+                </div>
+            </div>
+            <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Bus = @ViewData["Bus"]</h4>
+                    <h4>Available P= @ViewData["Bus"]</h4>
 
-<h2>Garage Slots</h2>
+                </div>
+            </div>
+            <div class="card text-white bg-danger mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Trucks = @ViewData["Truck"]</h4>
+                    <h4>Available P = @ViewData["Truck"]</h4>
+                </div>
+            </div>
+            <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Airplane = @ViewData["Airplane"]</h4>
+                    <h4>Available P = @ViewData["Airplane"]</h4>
+                </div>
+            </div>
+        </div>
+       
+        <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
+            <div class="card-body">
+               <h2>Garage Slots</h2>
 
-<ul>
-    @foreach (var slot in @ViewBag.GarageSlots)
-    {
-        if (slot == null)
-        {
-            <li>Empty</li>
-            continue;
-        }
-        <li>@slot.RegNumber</li>
-    }
-</ul>
-
+                <ul>
+                    @foreach (var slot in @ViewBag.GarageSlots)
+                    {
+                        if (slot == null)
+                        {
+                            <li>Empty</li>
+                            continue;
+                        }
+                        <li>@slot.RegNumber</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     @{
         <script>
