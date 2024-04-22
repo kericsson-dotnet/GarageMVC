@@ -136,17 +136,23 @@
 
 <h2>Garage Slots</h2>
 
-<ul>
-    @foreach (var slot in @ViewBag.GarageSlots)
+<table class="garage-grid">
+    @for (int i = 0; i < ViewBag.GarageSlots.Count; i++)
     {
-        if (slot == null)
+        if (i % 12 == 0)
         {
-            <li>Empty</li>
-            continue;
+            @:<tr>
         }
-        <li>@slot.RegNumber</li>
+        var slot = ViewBag.GarageSlots[i];
+        <td class="@(slot == null ? "empty-slot" : "occupied-slot")">
+            @(slot == null ? "Empty" : slot.RegNumber)
+        </td>
+        if ((i + 1) % 12 == 0)
+        {
+            @:</tr>
+        }
     }
-</ul>
+</table>
 
 @section Scripts {
     @{

@@ -73,3 +73,20 @@ body {
 .mb-Seed {
     padding-left: 10px;
 }
+.empty-slot {
+  background-color: green;
+}
+
+.occupied-slot {
+  background-color: grey;
+}
+.garage-grid {
+  border-collapse: separate;
+  border-spacing: 10px; /* Adjust the spacing as needed */
+  width: 100%; /* Adjust the width as needed */
+}
+
+.garage-grid td {
+  border: 1px solid #aaaaaa;
+  padding: 0.5rem;
+}
