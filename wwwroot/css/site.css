@@ -74,7 +74,7 @@ body {
     padding-left: 10px;
 }
 .empty-slot {
-  background-color: green;
+  background-color: #73a839;
 }
 
 .occupied-slot {
