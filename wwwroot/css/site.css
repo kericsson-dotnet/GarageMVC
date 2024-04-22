@@ -12,7 +12,7 @@ html {
 
 @font-face {
     font-family: 'wrabbit';
-    src: url('/fonts/white-rabbit.TTF') format('truetype');
+    src: url('/fonts/Sixtyfour-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -56,7 +56,20 @@ body {
     width: 315px;
 }
 
+.custom-container3 {
+    margin-top: 3em;
+    margin-bottom: 1em;
+}
+
 #parkedTime {
     margin: auto;
     padding-top: 8em;
+}
+
+.mb-Park {
+    padding-right: 10px;
+}
+
+.mb-Seed {
+    padding-left: 10px;
 }

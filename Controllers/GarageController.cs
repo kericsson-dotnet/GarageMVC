@@ -17,6 +17,8 @@ namespace GarageMVC.Controllers
         private int motorcycle;
         private int airplan;
 
+        public const decimal hourlyRate = 1.23m;
+
         public List<ParkedVehicle?> GarageSlots { get; set; }
         // Nytillagd variabel
         public bool IsDbEmpty { get; }
@@ -63,8 +65,7 @@ namespace GarageMVC.Controllers
                 TimeSpan parkingDuration = DateTime.Now - checkInTime.Value;
                 double totalHours = Math.Ceiling(parkingDuration.TotalHours);
 
-                // Assuming a parking rate of $5 per hour
-                decimal parkingFee = (decimal)totalHours * 5;
+                decimal parkingFee = (decimal)totalHours * hourlyRate;
 
                 return parkingFee;
             }
@@ -286,7 +287,7 @@ namespace GarageMVC.Controllers
                 int minutes = duration.Minutes;
 
                 // Lagt till pris och totalkostnad (decimal datatyp)
-                decimal hourlyRate = 1.23M;
+                //decimal hourlyRate = 1.23M;
                 decimal totalTimeInHours = (days * 24) + hours + ((decimal)minutes / 60);
 
                 string totalSum = (totalTimeInHours * hourlyRate).ToString("0.###");
