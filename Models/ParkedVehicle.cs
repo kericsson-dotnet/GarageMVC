@@ -8,6 +8,8 @@ namespace GarageMVC.Models
         Car,
         Motorcycle,
         Bus,
+        Airplan,
+        Truck,
     }
     [Index(nameof(RegNumber), IsUnique = true)]
     public class ParkedVehicle
@@ -36,6 +38,6 @@ namespace GarageMVC.Models
 
         public DateTime CheckInTime { get; set; } = DateTime.Now;
         
-
+        public int Slot { get; set; }
     }
 }

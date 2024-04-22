@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GarageMVC.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    [Migration("20240418142403_Init")]
+    [Migration("20240422122618_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -53,6 +53,9 @@ namespace GarageMVC.Migrations
                     b.Property<string>("RegNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Slot")
+                        .HasColumnType("int");
 
                     b.Property<int>("VehicleType")
                         .HasColumnType("int");
