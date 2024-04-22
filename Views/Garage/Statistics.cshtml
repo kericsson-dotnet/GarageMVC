@@ -1,0 +1,51 @@
+﻿@model GarageMVC.Models.StatisticsViewModel
+<div class="container">
+    <div class="text-center">
+       
+        <h1 class="mt-5">Garage Statistics</h1>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Total Parked Vehicles</h4>
+                    <p class="card-text">@Model.TotalParkedVehicles</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Total Number of Wheels</h4>
+                    <p class="card-text">@Model.TotalWheels</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Total Revenue</h4>
+                    <p class="card-text">$@Model.TotalFees</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Longest Parking Duration</h4>
+                    <p class="card-text">@Model.LongestDurationHours.ToString("0.00") hours</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-dark bg-secondary mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Shortest Parking Duration</h4>
+                    <p class="car <p class="card-text">@Model.ShortestDurationHours.ToString("0.00") hours</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
