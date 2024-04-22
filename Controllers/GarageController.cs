@@ -116,14 +116,6 @@ namespace GarageMVC.Controllers
             return View(viewModel);
         }
 
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> Fadi
-=======
->>>>>>> Fadi
         public async Task<IActionResult> Index(string sortOrder)
         {
             ViewBag.IsDbEmpty = IsDbEmpty;
