@@ -5,11 +5,11 @@ namespace GarageMVC.Models
 {
     public enum VehicleType
     {
-        Car,
-        Motorcycle,
-        Bus,
-        Airplan,
-        Truck,
+        Car = 1,
+        Motorcycle = 1,
+        Bus = 2,
+        Airplane = 3,
+        Truck = 2,
     }
     [Index(nameof(RegNumber), IsUnique = true)]
     public class ParkedVehicle

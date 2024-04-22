@@ -10,7 +10,7 @@ namespace GarageMVC.Controllers
     public class GarageController : Controller
     {
         private readonly GarageContext _context;
-        private static readonly int fixedParkNumber = 5;
+        private static readonly int fixedParkNumber = 20;
         private int car;
         private int truck;
         private int bus;
@@ -30,7 +30,10 @@ namespace GarageMVC.Controllers
 
             foreach (var vehicle in _context.ParkedVehicle)
             {
-                GarageSlots[vehicle.Slot - 1] = vehicle;
+                for (int i = 0; i < (int)vehicle.VehicleType; i++)
+                {
+                GarageSlots[vehicle.Slot - 1 + i] = vehicle;
+                }
             }
         }
 
@@ -74,12 +77,12 @@ namespace GarageMVC.Controllers
         {
             var parkedVehicles = _context.ParkedVehicle.ToList();
             decimal totalFees = 0;
-          
+
             foreach (var vehicle in parkedVehicles)
             {
                 totalFees += CalculateParkingFee(vehicle.CheckInTime);
             }
-           
+
             return totalFees;
         }
 
@@ -336,8 +339,7 @@ namespace GarageMVC.Controllers
         public async Task<IActionResult> Create([Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels")] ParkedVehicle parkedVehicle)
         {
             TempData["Message"] = "";
-            parkedVehicle.Slot = ClaimNextAvailableSlot() + 1;
-            
+            parkedVehicle.Slot = ClaimNextAvailableSlot(parkedVehicle.VehicleType) + 1;
             if (parkedVehicle.Slot == 0)
             {
                 TempData["Message"] = "Garage is full!";
@@ -443,7 +445,7 @@ namespace GarageMVC.Controllers
                 searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
                 searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
                 searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
-                
+
             }
             return View("Index", searchVehicles.Distinct().ToArray());
         }
@@ -491,15 +493,22 @@ namespace GarageMVC.Controllers
 
         private readonly object lockObject = new object();
 
-        private int ClaimNextAvailableSlot()
+        private int ClaimNextAvailableSlot(VehicleType vehicleType)
         {
+            var requiredSlots = (int)vehicleType;
             lock (lockObject)
             {
-                for (int i = 0; i < GarageSlots.Count; i++)
+                for (int i = 0; i <= GarageSlots.Count - requiredSlots; i++)
                 {
-                    if (GarageSlots[i] == null)
+                    // Check if there are enough contiguous null slots
+                    if (Enumerable.Range(i, requiredSlots).All(j => GarageSlots[j] == null))
                     {
-                        GarageSlots[i] = new ParkedVehicle(); // Placeholder
+                        // Reserve the slots
+                        for (int j = i; j < i + requiredSlots; j++)
+                        {
+                            GarageSlots[j] = new ParkedVehicle(); // Placeholder
+                        }
+
                         return i;
                     }
                 }
