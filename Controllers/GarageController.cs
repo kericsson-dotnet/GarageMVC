@@ -10,13 +10,14 @@ namespace GarageMVC.Controllers
     public class GarageController : Controller
     {
         private readonly GarageContext _context;
-        private static readonly int fixedParkNumber = 60;
+        private static readonly int fixedParkNumber = 5;
         private int car;
         private int truck;
         private int bus;
         private int motorcycle;
         private int airplan;
 
+        public List<ParkedVehicle?> GarageSlots { get; set; }
         // Nytillagd variabel
         public bool IsDbEmpty { get; }
 
@@ -25,6 +26,12 @@ namespace GarageMVC.Controllers
             _context = context;
 
             IsDbEmpty = !_context.ParkedVehicle.Any();
+            GarageSlots = new List<ParkedVehicle?>(new ParkedVehicle?[fixedParkNumber]);
+
+            foreach (var vehicle in _context.ParkedVehicle)
+            {
+                GarageSlots[vehicle.Slot - 1] = vehicle;
+            }
         }
 
         public async Task<IActionResult> CheckInVehicle(string regNumber)
@@ -50,6 +57,7 @@ namespace GarageMVC.Controllers
         public async Task<IActionResult> Index(string sortOrder)
         {
             ViewBag.IsDbEmpty = IsDbEmpty;
+            ViewBag.GarageSlots = GarageSlots;
             ViewData["VehicleTypeSort"] = string.IsNullOrEmpty(sortOrder) ? "vehicleType_desc" : "";
             ViewData["RegNumberSort"] = sortOrder == "regNumber" ? "regNumber_desc" : "regNumber";
             ViewData["ColorSort"] = sortOrder == "color" ? "color_desc" : "color";
@@ -226,7 +234,7 @@ namespace GarageMVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult SeedVehicles()
+        public async Task<ActionResult> SeedVehicles()
         {
             var seed = new[]
             {
@@ -249,7 +257,7 @@ namespace GarageMVC.Controllers
                 // Seeda inte fordonet om det redan finns ett parkerat fordon i db med samma regnummer.
                 if (!_context.ParkedVehicle.Any(v => v.RegNumber == vehicle.RegNumber))
                 {
-                    _context.ParkedVehicle.Add(vehicle);
+                    var result = Create(vehicle).Result;
                 }
             }
 
@@ -266,13 +274,19 @@ namespace GarageMVC.Controllers
         public async Task<IActionResult> Create([Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels")] ParkedVehicle parkedVehicle)
         {
             TempData["Message"] = "";
+            parkedVehicle.Slot = ClaimNextAvailableSlot() + 1;
+            
+            if (parkedVehicle.Slot == 0)
+            {
+                TempData["Message"] = "Garage is full!";
+                return View(parkedVehicle);
+            }
 
             if (ModelState.IsValid && !ParkedVehicleExistsByReg(parkedVehicle.RegNumber))
             {
                 _context.Add(parkedVehicle);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber + " parked successfully!";
-                string test = parkedVehicle.VehicleType.ToString();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -406,6 +420,25 @@ namespace GarageMVC.Controllers
         private bool ParkedVehicleExistsByReg(String RegNo)
         {
             return _context.ParkedVehicle.Any(v => v.RegNumber == RegNo);
+        }
+
+        private readonly object lockObject = new object();
+
+        private int ClaimNextAvailableSlot()
+        {
+            lock (lockObject)
+            {
+                for (int i = 0; i < GarageSlots.Count; i++)
+                {
+                    if (GarageSlots[i] == null)
+                    {
+                        GarageSlots[i] = new ParkedVehicle(); // Placeholder
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
         }
     }
 }
