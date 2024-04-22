@@ -119,6 +119,20 @@
 <h2>Truck = @ViewData["TruckAmount"]</h2>
 <h2>Airplan = @ViewData["AirplanAmount"]</h2>
 
+<h2>Garage Slots</h2>
+
+<ul>
+    @foreach (var slot in @ViewBag.GarageSlots)
+    {
+        if (slot == null)
+        {
+            <li>Empty</li>
+            continue;
+        }
+        <li>@slot.RegNumber</li>
+    }
+</ul>
+
 @section Scripts {
     @{
         <script>
