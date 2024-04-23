@@ -2,12 +2,12 @@
 {
     public class StatisticsViewModel
     {
-        public int TotalParkedVehicles { get; set; }
-        public int TotalWheels { get; set; }
-        public decimal TotalFees { get; set; }
+        public int TotalParkedVehicles { get; set; } = default;
+        public int TotalWheels { get; set; } = default;
+        public decimal TotalFees { get; set; } = default;
 
-        public double LongestDurationHours { get; set; }
-        public double ShortestDurationHours { get; set; }
+        public double LongestDurationHours { get; set; } = default;
+        public double ShortestDurationHours { get; set; } = default;
 
     }
 }
