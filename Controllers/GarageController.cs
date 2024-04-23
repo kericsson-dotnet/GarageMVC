@@ -430,7 +430,6 @@ namespace GarageMVC.Controllers
                     existingVehicle.Make = parkedVehicle.Make;
                     existingVehicle.Model = parkedVehicle.Model;
                     existingVehicle.NumberOfWheels = parkedVehicle.NumberOfWheels;
-                    existingVehicle.CheckInTime = parkedVehicle.CheckInTime;
 
                     await _context.SaveChangesAsync();
                 }
