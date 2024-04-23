@@ -97,6 +97,16 @@ namespace GarageMVC.Controllers
         // GarageController.cs
         public async Task<IActionResult> Statistics()
         {
+            int parkNumber = CalcEmptyPark();
+            ViewData["Airplane"] = parkNumber / 3;
+            ViewData["Bus"] = parkNumber / 2;
+            ViewData["Car"] = parkNumber;
+
+            ViewData["CarAmount"] = car;
+            ViewData["TruckAmount"] = truck;
+            ViewData["BusAmount"] = bus;
+            ViewData["MotorcycleAmount"] = motorcycle;
+            ViewData["AirplaneAmount"] = airplan;
             // Get the total number of parked vehicles
             var totalVehicles = await _context.ParkedVehicle.CountAsync();
 
@@ -138,16 +148,6 @@ namespace GarageMVC.Controllers
             ViewData["ModelSort"] = sortOrder == "model" ? "model_desc" : "model";
             ViewData["NumberOfWheelsSort"] = sortOrder == "numberOfWheels" ? "numberOfWheels_desc" : "numberOfWheels";
             ViewData["CheckInTimeSort"] = sortOrder == "checkInTime" ? "checkInTime_desc" : "checkInTime";
-            int parkNumber = CalcEmptyPark();
-            ViewData["Airplane"] = parkNumber / 3;
-            ViewData["Bus"] = parkNumber / 2;
-            ViewData["Car"] = parkNumber;
-
-            ViewData["CarAmount"] = car;
-            ViewData["TruckAmount"] = truck;
-            ViewData["BusAmount"] = bus;
-            ViewData["MotorcycleAmount"] = motorcycle;
-            ViewData["AirplaneAmount"] = airplan;
 
             var vehicles = from v in _context.ParkedVehicle
                            select v;
@@ -407,16 +407,9 @@ namespace GarageMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels,CheckInTime")] ParkedVehicle parkedVehicle)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels,ParkingTime,IsParked")] ParkedVehicle parkedVehicle)
         {
-            TempData["Message"] = "";
             if (id != parkedVehicle.Id)
-            {
-                return NotFound();
-            }
-
-            var existingVehicle = await _context.ParkedVehicle.FindAsync(id);
-            if (existingVehicle == null)
             {
                 return NotFound();
             }
@@ -425,18 +418,12 @@ namespace GarageMVC.Controllers
             {
                 try
                 {
-                    existingVehicle.VehicleType = parkedVehicle.VehicleType;
-                    existingVehicle.RegNumber = parkedVehicle.RegNumber;
-                    existingVehicle.Color = parkedVehicle.Color;
-                    existingVehicle.Make = parkedVehicle.Make;
-                    existingVehicle.Model = parkedVehicle.Model;
-                    existingVehicle.NumberOfWheels = parkedVehicle.NumberOfWheels;
-
+                    _context.Update(parkedVehicle);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ParkedVehicleExistsByReg(existingVehicle.RegNumber))
+                    if (!ParkedVehicleExistsByReg(parkedVehicle.RegNumber))
                     {
                         return NotFound();
                     }
@@ -445,113 +432,111 @@ namespace GarageMVC.Controllers
                         throw;
                     }
                 }
-                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber + " updated successfully!";
                 return RedirectToAction(nameof(Index));
-            }            
+            }
             return View(parkedVehicle);
         }
 
-    public IActionResult Search(string searchValue)
-    {
-        List<ParkedVehicle> searchVehicles = new List<ParkedVehicle>();
-        var allVehicles = _context.ParkedVehicle;
-        ViewBag.IsDbEmpty = IsDbEmpty;
-        ViewBag.GarageSlots = GarageSlots;
-        if (searchValue != null)
+        public IActionResult Search(string searchValue)
         {
+            List<ParkedVehicle> searchVehicles = new List<ParkedVehicle>();
+            var allVehicles = _context.ParkedVehicle;
+            ViewBag.IsDbEmpty = IsDbEmpty;
+            ViewBag.GarageSlots = GarageSlots;
+            if (searchValue != null)
+            {
 
+                foreach (var vehicle in _context.ParkedVehicle)
+                {
+                    string text = vehicle.VehicleType.ToString().ToLower();
+                    if (text.Contains(searchValue.ToLower()))
+                        searchVehicles.Add(vehicle);
+                }
+                searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
+                searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
+                searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
+                searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
+                searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
+
+            } else
+            {
+                searchVehicles = allVehicles.ToList();
+            }
+            return View("Index", searchVehicles.Distinct().ToArray());
+        }
+
+        // POST: Garage/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
+            if (parkedVehicle != null)
+            {
+                _context.ParkedVehicle.Remove(parkedVehicle);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private int CalcEmptyPark()
+        {
             foreach (var vehicle in _context.ParkedVehicle)
             {
-                string text = vehicle.VehicleType.ToString().ToLower();
-                if (text.Contains(searchValue.ToLower()))
-                    searchVehicles.Add(vehicle);
+                String typeVehicle = vehicle.VehicleType.ToString();
+                if (typeVehicle.Equals("Car"))
+                    car = car + 1;
+                else if (typeVehicle.Equals("Motorcycle"))
+                    motorcycle = motorcycle + 1;
+                else if (typeVehicle.Equals("Bus"))
+                    bus = bus + 1;
+                else if (typeVehicle.Equals("Truck"))
+                    truck = truck + 1;
+                else
+                    airplan = airplan + 1;
             }
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Make.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
-            searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
-
-        }
-        else
-        {
-            searchVehicles = allVehicles.ToList();
-        }
-        return View("Index", searchVehicles.Distinct().ToArray());
-    }
-
-    // POST: Garage/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
-        if (parkedVehicle != null)
-        {
-            _context.ParkedVehicle.Remove(parkedVehicle);
+            return fixedParkNumber - car - motorcycle - (bus * 2) - (truck * 2) - (airplan * 3);
         }
 
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private int CalcEmptyPark()
-    {
-        foreach (var vehicle in _context.ParkedVehicle)
+        private bool ParkedVehicleExistsByReg(String RegNo)
         {
-            String typeVehicle = vehicle.VehicleType.ToString();
-            if (typeVehicle.Equals("Car"))
-                car = car + 1;
-            else if (typeVehicle.Equals("Motorcycle"))
-                motorcycle = motorcycle + 1;
-            else if (typeVehicle.Equals("Bus"))
-                bus = bus + 1;
-            else if (typeVehicle.Equals("Truck"))
-                truck = truck + 1;
-            else
-                airplan = airplan + 1;
+            return _context.ParkedVehicle.Any(v => v.RegNumber == RegNo);
         }
-        return fixedParkNumber - car - motorcycle - (bus * 2) - (truck * 2) - (airplan * 3);
-    }
 
-    private bool ParkedVehicleExistsByReg(String RegNo)
-    {
-        return _context.ParkedVehicle.Any(v => v.RegNumber == RegNo);
-    }
-
-    private int ClaimNextAvailableSlot(VehicleType vehicleType)
-    {
-        var requiredSlots = vehicleType.GetNumberOfSlots();
-        lock (lockObject)
+        private int ClaimNextAvailableSlot(VehicleType vehicleType)
         {
-            if (vehicleType == VehicleType.Motorcycle)
+            var requiredSlots = vehicleType.GetNumberOfSlots();
+            lock (lockObject)
             {
-                // Check for any slot with motorcycles and less than 3 motorcycles
-                for (int i = 0; i < GarageSlots.Count; i++)
+                if (vehicleType == VehicleType.Motorcycle)
                 {
-                    if (GarageSlots[i] != null && GarageSlots[i].Count < 3 && GarageSlots[i][0].VehicleType == VehicleType.Motorcycle)
+                    // Check for any slot with motorcycles and less than 3 motorcycles
+                    for (int i = 0; i < GarageSlots.Count; i++)
                     {
-                        GarageSlots[i].Add(new ParkedVehicle()); // Add the motorcycle to the slot
+                        if (GarageSlots[i] != null && GarageSlots[i].Count < 3 && GarageSlots[i][0].VehicleType == VehicleType.Motorcycle)
+                        {
+                            GarageSlots[i].Add(new ParkedVehicle()); // Add the motorcycle to the slot
+                            return i;
+                        }
+                    }
+                }
+
+                for (int i = 0; i <= GarageSlots.Count - requiredSlots; i++)
+                {
+                    // Check if there are enough null slots in a row
+                    if (Enumerable.Range(i, requiredSlots).All(j => GarageSlots[j] == null))
+                    {
+                        for (int j = i; j < i + requiredSlots; j++)
+                        {
+                            GarageSlots[j] = new List<ParkedVehicle?> { new ParkedVehicle() }; // Reserve the slot
+                        }
                         return i;
                     }
                 }
             }
 
-            for (int i = 0; i <= GarageSlots.Count - requiredSlots; i++)
-            {
-                // Check if there are enough null slots in a row
-                if (Enumerable.Range(i, requiredSlots).All(j => GarageSlots[j] == null))
-                {
-                    for (int j = i; j < i + requiredSlots; j++)
-                    {
-                        GarageSlots[j] = new List<ParkedVehicle?> { new ParkedVehicle() }; // Reserve the slot
-                    }
-                    return i;
-                }
-            }
+            return -1;
         }
-
-        return -1;
     }
-}
 }
