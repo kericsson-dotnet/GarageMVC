@@ -49,3 +49,43 @@
     </div>
 </div>
 
+<div class="container">
+    @*  <h2 class="my-3" style="color:#007bff; font-size: 24px;">Parking Update</h2> *@
+    <div class="row mt-4">
+
+        <div class="col-md-6">
+            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Cars= @ViewData["CarAmount"]</h4>
+                    <h4>Available P = @ViewData["Car"]</h4>
+                </div>
+            </div>
+            <div class="card bg-secondary mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Motorcycle = @ViewData["Motorcycle"]</h4>
+                    <h4>Available P = @ViewData["Motorcycle"]</h4>
+                </div>
+            </div>
+            <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Bus = @ViewData["Bus"]</h4>
+                    <h4>Available P= @ViewData["Bus"]</h4>
+
+                </div>
+            </div>
+            <div class="card text-white bg-danger mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Trucks = @ViewData["Truck"]</h4>
+                    <h4>Available P = @ViewData["Truck"]</h4>
+                </div>
+            </div>
+            <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4>Parked Airplane = @ViewData["Airplane"]</h4>
+                    <h4>Available P = @ViewData["Airplane"]</h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
