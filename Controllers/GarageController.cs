@@ -307,6 +307,12 @@ namespace GarageMVC.Controllers
             }
         }
 
+        public IActionResult InventoryCount()
+        {
+            int inventoryCount = _context.ParkedVehicle.Count();
+            return PartialView("_InventoryCount", inventoryCount);
+        }
+
         [HttpPost]
         public async Task<ActionResult> SeedVehicles()
         {
