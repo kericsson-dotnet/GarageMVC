@@ -1,9 +1,7 @@
 ﻿using GarageMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
 namespace GarageMVC.Controllers
 {
@@ -297,9 +295,10 @@ namespace GarageMVC.Controllers
 
                 // Lagt till pris och totalkostnad (decimal datatyp)
                 //decimal hourlyRate = 1.23M;
-                decimal totalTimeInHours = (days * 24) + hours + ((decimal)minutes / 60);
+                //decimal totalTimeInHours = (days * 24) + hours + ((decimal)minutes / 60);
+                //string totalSum = (totalTimeInHours * hourlyRate).ToString("0.###");
 
-                string totalSum = (totalTimeInHours * hourlyRate).ToString("0.###");
+                string totalSum = CalculateTotalParkingFees().ToString("0.###");
 
                 ViewBag.Days = days;
                 ViewBag.Hours = hours;
@@ -339,6 +338,17 @@ namespace GarageMVC.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult UnparkAllVehicles()
+        {
+            var vehicles = _context.ParkedVehicle.ToList();
+
+            _context.ParkedVehicle.RemoveRange(vehicles);
+
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Garage/Create
@@ -448,7 +458,8 @@ namespace GarageMVC.Controllers
                 foreach (var vehicle in _context.ParkedVehicle)
                 {
                     string text = vehicle.VehicleType.ToString().ToLower();
-                    if (text.Contains(searchValue.ToLower())) searchVehicles.Add(vehicle);
+                    if (text.Contains(searchValue.ToLower()))
+                        searchVehicles.Add(vehicle);
                 }
                 searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.RegNumber.Contains(searchValue)));
                 searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Color.Contains(searchValue)));
@@ -480,11 +491,16 @@ namespace GarageMVC.Controllers
             foreach (var vehicle in _context.ParkedVehicle)
             {
                 String typeVehicle = vehicle.VehicleType.ToString();
-                if (typeVehicle.Equals("Car")) car = car + 1;
-                else if (typeVehicle.Equals("Motorcycle")) motorcycle = motorcycle + 1;
-                else if (typeVehicle.Equals("Bus")) bus = bus + 1;
-                else if (typeVehicle.Equals("Truck")) truck = truck + 1;
-                else airplan = airplan + 1;
+                if (typeVehicle.Equals("Car"))
+                    car = car + 1;
+                else if (typeVehicle.Equals("Motorcycle"))
+                    motorcycle = motorcycle + 1;
+                else if (typeVehicle.Equals("Bus"))
+                    bus = bus + 1;
+                else if (typeVehicle.Equals("Truck"))
+                    truck = truck + 1;
+                else
+                    airplan = airplan + 1;
             }
             return fixedParkNumber - car - motorcycle - (bus * 2) - (truck * 2) - (airplan * 3);
         }

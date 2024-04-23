@@ -6,21 +6,29 @@
 
 <h1 class="heading">Garage v1.0</h1>
 
-<p>
-    <a class="btn btn-outline-primary" asp-action="Create">Park</a>
-</p>
-
-<p>
-@*  Lagt till så att knappen är utgråd om garaget inte har några parkerade fordon. Blå knanpp om det finns fordon. *@
-    <a href="@Url.Action("Unpark", "Garage")" class="btn @(ViewBag.IsDbEmpty ? "btn-secondary" : "btn-primary")">Unpark Vehicle</a>
-</p>
-
-<p>
-    @using (Html.BeginForm("SeedVehicles", "Garage", FormMethod.Post))
-    {
-        <input type="submit" value="Seed" />
-    }
-</p>
+<div class="custom-container3 d-flex justify-content-between align-items-start">
+    <div>
+        <p class="mb-0">
+            <a href="@Url.Action("Create", "Garage")" class="btn btn-primary">Park</a>
+            @* Lagt till så att knappen är utgråd om garaget inte har några parkerade fordon. Blå knanpp om det finns fordon. *@
+            <a href="@Url.Action("Unpark", "Garage")" class="btn @(ViewBag.IsDbEmpty ? "btn-secondary" : "btn-primary")">Unpark</a>
+        </p>
+    </div>
+    <div class="d-flex justify-content-end">
+        <p class="mb-Park">
+            @using (Html.BeginForm("SeedVehicles", "Garage", FormMethod.Post))
+            {
+                <input type="submit" value="Seed" class="btn btn-secondary" />
+            }
+        </p>
+        <p class="mb-Seed">
+            @using (Html.BeginForm("UnparkAllVehicles", "Garage", FormMethod.Post))
+            {
+                <input type="submit" value="Unpark All" class="btn btn-secondary" />
+            }
+        </p>
+    </div>
+</div>
 
 <table class="table table-hover">
     <thead>
