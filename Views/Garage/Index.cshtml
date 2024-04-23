@@ -108,13 +108,6 @@
                     <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@item.Id">Details</a>
                     <a class="btn btn-outline-danger" asp-action="UnparkReceipt" asp-route-id="@item.Id">Unpark</a>
                 </td>
-@*                 <td class="text-right">
-                    <div class="btn-group">
-                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id">Update</a>
-                        <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a class="btn btn-outline-danger" asp-action="UnparkReceipt" asp-route-id="@item.Id">Unpark</a>
-                    </div>
-                </td> *@
             </tr>
         }
     </tbody>
@@ -122,61 +115,36 @@
 
 <div class="container">
  @*  <h2 class="my-3" style="color:#007bff; font-size: 24px;">Parking Update</h2> *@
-    <div class="row mt-4">
 
-        <div class="col-md-6">
-            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Cars= @ViewData["CarAmount"]</h4>
-                   @*  <h4>Available P = @ViewData["Car"]</h4> *@
-                </div>
-            </div>
-            <div class="card bg-secondary mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Motorcycle = @ViewData["Motorcycle"]</h4>
-                   @*  <h4>Available P = @ViewData["Motorcycle"]</h4> *@
-                </div>
-            </div>
-            <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Bus = @ViewData["Bus"]</h4>
-                   @*  <h4>Available P= @ViewData["Bus"]</h4> *@
-
-                </div>
-            </div>
-            <div class="card text-white bg-danger mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Trucks = @ViewData["Truck"]</h4>
-                    @* <h4>Available P = @ViewData["Truck"]</h4> *@
-                </div>
-            </div>
-            <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Airplane = @ViewData["Airplane"]</h4>
-                   @*  <h4>Available P = @ViewData["Airplane"]</h4> *@
-                </div>
-            </div>
-        </div>
-       
-        <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
-            <div class="card-body">
-               <h2>Garage Slots</h2>
-
-                <ul>
-                    @foreach (var slot in @ViewBag.GarageSlots)
-                    {
-                        if (slot == null)
-                        {
-                            <li>Empty</li>
-                            continue;
-                        }
-                        <li>@slot.RegNumber</li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
+<table class="garage-grid">
+    @for (int i = 0; i < ViewBag.GarageSlots.Count; i++)
+    {
+        if (i % 12 == 0)
+        {
+            @:<tr>
+        }
+        var slot = ViewBag.GarageSlots[i];
+        <td class="@(slot == null || slot.Count == 0 ? "empty-slot" : "occupied-slot")">
+            @if (slot == null || slot.Count == 0)
+            {
+                @:Empty
+            }
+            else
+            {
+                foreach (var vehicle in slot)
+                {
+                    <div>@vehicle.RegNumber</div>
+                }
+            }
+        </td>
+        if ((i + 1) % 12 == 0)
+        {
+            @:</tr>
+        }
+    }
+</table>
+
 @section Scripts {
     @{
         <script>
