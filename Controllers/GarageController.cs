@@ -2,24 +2,23 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-
 namespace GarageMVC.Controllers
 {
     public class GarageController : Controller
     {
         private readonly GarageContext _context;
-        private static readonly int fixedParkNumber = 24;
+        private const int fixedParkNumber = 24;
         private int car;
         private int truck;
         private int bus;
         private int motorcycle;
         private int airplan;
 
-        public const decimal hourlyRate = 1.23m;
-
-        public List<List<ParkedVehicle?>> GarageSlots { get; set; }
+        private const decimal hourlyRate = 1.23m;
+        private readonly object lockObject = new object();
+        private List<List<ParkedVehicle?>> GarageSlots;
         // Nytillagd variabel
-        public bool IsDbEmpty { get; }
+        private bool IsDbEmpty;
 
         public GarageController(GarageContext context)
         {
@@ -63,6 +62,7 @@ namespace GarageMVC.Controllers
             return RedirectToAction("Index", "Home"); // Redirect to the home page after check-in
 
         }
+
         // Method to calculate parking fee for a specific vehicle
         private decimal CalculateParkingFee(ParkedVehicle vehicle)
         {
@@ -139,7 +139,7 @@ namespace GarageMVC.Controllers
             ViewData["NumberOfWheelsSort"] = sortOrder == "numberOfWheels" ? "numberOfWheels_desc" : "numberOfWheels";
             ViewData["CheckInTimeSort"] = sortOrder == "checkInTime" ? "checkInTime_desc" : "checkInTime";
             int parkNumber = CalcEmptyPark();
-            ViewData["Airplan"] = parkNumber / 3;
+            ViewData["Airplane"] = parkNumber / 3;
             ViewData["Bus"] = parkNumber / 2;
             ViewData["Car"] = parkNumber;
 
@@ -147,7 +147,7 @@ namespace GarageMVC.Controllers
             ViewData["TruckAmount"] = truck;
             ViewData["BusAmount"] = bus;
             ViewData["MotorcycleAmount"] = motorcycle;
-            ViewData["AirplanAmount"] = airplan;
+            ViewData["AirplaneAmount"] = airplan;
 
             var vehicles = from v in _context.ParkedVehicle
                            select v;
@@ -417,7 +417,7 @@ namespace GarageMVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ParkedVehicleExists(parkedVehicle.Id))
+                    if (!ParkedVehicleExistsByReg(parkedVehicle.RegNumber))
                     {
                         return NotFound();
                     }
@@ -431,27 +431,12 @@ namespace GarageMVC.Controllers
             return View(parkedVehicle);
         }
 
-        // GET: Garage/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var parkedVehicle = await _context.ParkedVehicle
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (parkedVehicle == null)
-            {
-                return NotFound();
-            }
-            return View(parkedVehicle);
-        }
-
         public IActionResult Search(string searchValue)
         {
             List<ParkedVehicle> searchVehicles = new List<ParkedVehicle>();
             var allVehicles = _context.ParkedVehicle;
+            ViewBag.IsDbEmpty = IsDbEmpty;
+            ViewBag.GarageSlots = GarageSlots;
             if (searchValue != null)
             {
 
@@ -467,6 +452,9 @@ namespace GarageMVC.Controllers
                 searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.Model.Contains(searchValue)));
                 searchVehicles.AddRange(_context.ParkedVehicle.Where(v => v.NumberOfWheels.ToString().Contains(searchValue)));
 
+            } else
+            {
+                searchVehicles = allVehicles.ToList();
             }
             return View("Index", searchVehicles.Distinct().ToArray());
         }
@@ -474,7 +462,7 @@ namespace GarageMVC.Controllers
         // POST: Garage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete2(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
             if (parkedVehicle != null)
@@ -505,19 +493,10 @@ namespace GarageMVC.Controllers
             return fixedParkNumber - car - motorcycle - (bus * 2) - (truck * 2) - (airplan * 3);
         }
 
-
-
-        private bool ParkedVehicleExists(int id)
-        {
-            return _context.ParkedVehicle.Any(e => e.Id == id);
-        }
-
         private bool ParkedVehicleExistsByReg(String RegNo)
         {
             return _context.ParkedVehicle.Any(v => v.RegNumber == RegNo);
         }
-
-        private readonly object lockObject = new object();
 
         private int ClaimNextAvailableSlot(VehicleType vehicleType)
         {
