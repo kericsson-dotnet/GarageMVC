@@ -21,7 +21,8 @@
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <!-- Counter för lediga parkeringsplatser -->
-                        @await Html.PartialAsync("_InventoryCount")
+                        @* @await Html.PartialAsync("_InventoryCount") *@
+                        <p>Total number of vehicles in the database: @ViewData["InventoryCount"]</p>
                     </ul>
                     <form class="d-flex" asp-action="Search">
                         <input class="form-control me-sm-2" name="searchValue" type="search" style="background-color:white" placeholder="">

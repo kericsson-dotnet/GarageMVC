@@ -148,7 +148,7 @@ namespace GarageMVC.Controllers
             ViewData["ModelSort"] = sortOrder == "model" ? "model_desc" : "model";
             ViewData["NumberOfWheelsSort"] = sortOrder == "numberOfWheels" ? "numberOfWheels_desc" : "numberOfWheels";
             ViewData["CheckInTimeSort"] = sortOrder == "checkInTime" ? "checkInTime_desc" : "checkInTime";
-
+            ViewData["InventoryCount"] = _context.ParkedVehicle.Count();
             var vehicles = from v in _context.ParkedVehicle
                            select v;
 
@@ -305,12 +305,6 @@ namespace GarageMVC.Controllers
                 ViewBag.Minutes = minutes;
                 ViewBag.TotalSum = totalSum;
             }
-        }
-
-        public IActionResult InventoryCount()
-        {
-            int inventoryCount = _context.ParkedVehicle.Count();
-            return PartialView("_InventoryCount", inventoryCount);
         }
 
         [HttpPost]
