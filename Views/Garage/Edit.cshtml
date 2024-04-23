@@ -62,6 +62,15 @@
    
 </div>
 
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+            var message = '@TempData["Message"]';
+            if (message !== "") {
+                alert(message);
+            }
+        </script>
+    }
 }
