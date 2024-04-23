@@ -312,8 +312,11 @@ namespace GarageMVC.Controllers
         {
             var seed = new[]
             {
-                new ParkedVehicle {
-                    VehicleType = VehicleType.Car, RegNumber = "ABC123", Color = "Red", Make = "Reliant", Model = "Robin", NumberOfWheels = 3, CheckInTime = DateTime.Now.AddHours(-27)
+				new ParkedVehicle {
+					VehicleType = VehicleType.Truck, RegNumber = "FLY007", Color = "Red with logo", Make = "SAAB", Model = "SkrotSaab 900", NumberOfWheels = 4, CheckInTime = DateTime.Now.AddHours(-27)
+				},
+				new ParkedVehicle {
+                    VehicleType = VehicleType.Car, RegNumber = "ABC123", Color = "Red", Make = "Reliant", Model = "Robin", NumberOfWheels = 3, CheckInTime = DateTime.Now.AddHours(-17)
                 },
                 new ParkedVehicle {
                     VehicleType = VehicleType.Bus, RegNumber = "DEF456", Color = "Black", Make = "Scania", Model = "Citywide", NumberOfWheels = 8, CheckInTime = DateTime.Now.AddHours(-4)
@@ -324,7 +327,10 @@ namespace GarageMVC.Controllers
                 new ParkedVehicle {
                     VehicleType = VehicleType.Motorcycle, RegNumber = "ZZZ111", Color = "Yellow", Make = "Kawasaki", Model = "Mupp", NumberOfWheels = 2, CheckInTime = DateTime.Now.AddHours(-25)
                 },
-            };
+				new ParkedVehicle {
+					VehicleType = VehicleType.Airplane, RegNumber = "SNE111", Color = "White", Make = "Airbus", Model = "A-320", NumberOfWheels = 8, CheckInTime = DateTime.Now.AddHours(-58)
+				},
+			};
 
             foreach (var vehicle in seed)
             {
