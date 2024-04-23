@@ -298,7 +298,7 @@ namespace GarageMVC.Controllers
                 //decimal totalTimeInHours = (days * 24) + hours + ((decimal)minutes / 60);
                 //string totalSum = (totalTimeInHours * hourlyRate).ToString("0.###");
 
-                string totalSum = CalculateTotalParkingFees().ToString("0.###");
+                string totalSum = CalculateParkingFee(parkedVehicle).ToString("0.###");
 
                 ViewBag.Days = days;
                 ViewBag.Hours = hours;

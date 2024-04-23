@@ -20,9 +20,14 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
+<<<<<<< HEAD
                         <!-- Counter för lediga parkeringsplatser -->
                         @* @await Html.PartialAsync("_InventoryCount") *@
                         <p>Total number of vehicles in the database: @ViewData["InventoryCount"]</p>
+=======
+                        <!-- Counter för lediga parkeringsplatser, ej klar -->
+                        @await Html.PartialAsync("_InventoryCount")
+>>>>>>> 5de01ad38e7f63f3f630eb5c4cc2dfacb36682f6
                     </ul>
                     <form class="d-flex" asp-action="Search">
                         <input class="form-control me-sm-2" name="searchValue" type="search" style="background-color:white" placeholder="">
