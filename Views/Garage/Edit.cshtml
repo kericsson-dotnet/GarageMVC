@@ -20,6 +20,8 @@
                     <option value="Car">Car</option>
                     <option value="Motorcycle">Motorcycle</option>
                     <option value="Bus">Bus</option>
+                    <option value="Airplane">Airplane</option>
+                    <option value="Truck">Truck</option>
                 </select>
                 <span asp-validation-for="VehicleType" class="text-danger"></span>
             </div>
@@ -60,12 +62,15 @@
    
 </div>
 
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        var message = '@TempData["Message"]';
-        if (message !== "") {
-            alert(message);
-        }
-    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+            var message = '@TempData["Message"]';
+            if (message !== "") {
+                alert(message);
+            }
+        </script>
+    }
 }

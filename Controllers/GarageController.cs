@@ -445,9 +445,9 @@ namespace GarageMVC.Controllers
                         throw;
                     }
                 }
+                TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber + " updated successfully!";
                 return RedirectToAction(nameof(Index));
-            }
-            TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber + " updated successfully!";
+            }            
             return View(parkedVehicle);
         }
 
