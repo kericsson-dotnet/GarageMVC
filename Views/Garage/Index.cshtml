@@ -6,21 +6,29 @@
 
 <h1 class="heading">Garage v1.0</h1>
 
-<p>
-    <a class="btn btn-outline-primary" asp-action="Create">Park</a>
-</p>
-
-<p>
-@*  Lagt till så att knappen är utgråd om garaget inte har några parkerade fordon. Blå knanpp om det finns fordon. *@
-    <a href="@Url.Action("Unpark", "Garage")" class="btn @(ViewBag.IsDbEmpty ? "btn-secondary" : "btn-primary")">Unpark Vehicle</a>
-</p>
-
-<p>
-    @using (Html.BeginForm("SeedVehicles", "Garage", FormMethod.Post))
-    {
-        <input type="submit" value="Seed" />
-    }
-</p>
+<div class="custom-container3 d-flex justify-content-between align-items-start">
+    <div>
+        <p class="mb-0">
+            <a href="@Url.Action("Create", "Garage")" class="btn btn-primary">Park</a>
+            @* Lagt till så att knappen är utgråd om garaget inte har några parkerade fordon. Blå knanpp om det finns fordon. *@
+            <a href="@Url.Action("Unpark", "Garage")" class="btn @(ViewBag.IsDbEmpty ? "btn-secondary" : "btn-primary")">Unpark</a>
+        </p>
+    </div>
+    <div class="d-flex justify-content-end">
+        <p class="mb-Park">
+            @using (Html.BeginForm("SeedVehicles", "Garage", FormMethod.Post))
+            {
+                <input type="submit" value="Seed" class="btn btn-secondary" />
+            }
+        </p>
+        <p class="mb-Seed">
+            @using (Html.BeginForm("UnparkAllVehicles", "Garage", FormMethod.Post))
+            {
+                <input type="submit" value="Unpark All" class="btn btn-secondary" />
+            }
+        </p>
+    </div>
+</div>
 
 <table class="table table-hover">
     <thead>
@@ -107,43 +115,7 @@
 
 <div class="container">
  @*  <h2 class="my-3" style="color:#007bff; font-size: 24px;">Parking Update</h2> *@
-    <div class="row mt-4">
 
-        <div class="col-md-6">
-            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Cars= @ViewData["CarAmount"]</h4>
-                    <h4>Available P = @ViewData["Car"]</h4>
-                </div>
-            </div>
-            <div class="card bg-secondary mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Motorcycle = @ViewData["MotorcycleAmount"]</h4>
-                    <h4>Available P = @ViewData["Car"]</h4>
-                </div>
-            </div>
-            <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Bus = @ViewData["BusAmount"]</h4>
-                    <h4>Available P= @ViewData["Bus"]</h4>
-
-                </div>
-            </div>
-            <div class="card text-white bg-danger mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Trucks = @ViewData["TruckAmount"]</h4>
-                    <h4>Available P = @ViewData["Bus"]</h4>
-                </div>
-            </div>
-            <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4>Parked Airplane = @ViewData["AirplaneAmount"]</h4>
-                    <h4>Available P = @ViewData["Airplane"]</h4>
-                </div>
-            </div>
-        </div>
-       
-    </div>
 </div>
 <table class="garage-grid">
     @for (int i = 0; i < ViewBag.GarageSlots.Count; i++)

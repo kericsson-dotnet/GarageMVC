@@ -81,6 +81,7 @@ body {
   background-color: grey;
 }
 .garage-grid {
+  color: white;
   border-collapse: separate;
   border-spacing: 10px; /* Adjust the spacing as needed */
   width: 100%; /* Adjust the width as needed */
