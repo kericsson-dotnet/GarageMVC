@@ -409,6 +409,7 @@ namespace GarageMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,VehicleType,RegNumber,Color,Make,Model,NumberOfWheels,ParkingTime,IsParked")] ParkedVehicle parkedVehicle)
         {
+            TempData["Message"] = "";
             if (id != parkedVehicle.Id)
             {
                 return NotFound();
@@ -434,6 +435,7 @@ namespace GarageMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            TempData["Message"] = "Vehicle with registration number " + parkedVehicle.RegNumber + " updated successfully!";
             return View(parkedVehicle);
         }
 
