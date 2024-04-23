@@ -1,7 +1,7 @@
 html {
-    font-size: 14px;
-    position: relative;
-    min-height: 100%;
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -11,14 +11,18 @@ html {
 }
 
 @font-face {
-    font-family: 'wrabbit';
-    src: url('/fonts/Sixtyfour-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'wrabbit';
+  src: url('/fonts/Sixtyfour-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -32,47 +36,48 @@ body {
 }
 
 #searchBox {
-    color:black;
+  color: black;
 }
 
 .custom-container {
-    font-family: 'wrabbit', sans-serif;
-    display: flex;
-    align-items: center;
-    width: 315px;
-    height: 592px;
-    background-image: url('/images/receipt.jpg');
-    background-size: cover;
-    background-position: center;
-    border: 2px solid black;
-    border-radius: 3px;
+  font-family: 'wrabbit', sans-serif;
+  display: flex;
+  align-items: center;
+  width: 315px;
+  height: 592px;
+  background-image: url('/images/receipt.jpg');
+  background-size: cover;
+  background-position: center;
+  border: 2px solid black;
+  border-radius: 3px;
 }
 
 .custom-container2 {
-    padding-top: 2em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 315px;
+  padding-top: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 315px;
 }
 
 .custom-container3 {
-    margin-top: 3em;
-    margin-bottom: 1em;
+  margin-top: 3em;
+  margin-bottom: 1em;
 }
 
 #parkedTime {
-    margin: auto;
-    padding-top: 8em;
+  margin: auto;
+  padding-top: 8em;
 }
 
 .mb-Park {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 .mb-Seed {
-    padding-left: 10px;
+  padding-left: 10px;
 }
+
 .empty-slot {
   background-color: #73a839;
 }
@@ -80,14 +85,32 @@ body {
 .occupied-slot {
   background-color: grey;
 }
+
 .garage-grid {
   color: white;
   border-collapse: separate;
-  border-spacing: 10px; /* Adjust the spacing as needed */
-  width: 100%; /* Adjust the width as needed */
+  border-spacing: 10px;
+  /* Adjust the spacing as needed */
+  width: 100%;
+  /* Adjust the width as needed */
 }
 
 .garage-grid td {
   border: 1px solid #aaaaaa;
   padding: 0.5rem;
+}
+
+.inventory {
+  display: flex;
+  justify-content: center;
+  /* Horizontal centering */
+  align-items: center;
+  /* Vertical centering */
+}
+
+.navbar-text {
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 14px;
+  /* Adjust font size as needed */
 }
