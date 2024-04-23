@@ -97,6 +97,7 @@ namespace GarageMVC.Controllers
         // GarageController.cs
         public async Task<IActionResult> Statistics()
         {
+            ViewData["InventoryCount"] = _context.ParkedVehicle.Count();
             if (!IsDbEmpty)
             {
                 var totalVehicles = await _context.ParkedVehicle.CountAsync();
@@ -129,11 +130,12 @@ namespace GarageMVC.Controllers
             }
         }
 
+
         public async Task<IActionResult> Index(string sortOrder)
         {
             ViewBag.IsDbEmpty = IsDbEmpty;
             ViewBag.GarageSlots = GarageSlots;
-            ViewData["VehicleTypeSort"] = string.IsNullOrEmpty(sortOrder) ? "vehicleType_desc" : "";
+            ViewData["VehicleTypeSort"] = sortOrder == "vehicleType" ? "vehicleType_desc" : "vehicleType";
             ViewData["RegNumberSort"] = sortOrder == "regNumber" ? "regNumber_desc" : "regNumber";
             ViewData["ColorSort"] = sortOrder == "color" ? "color_desc" : "color";
             ViewData["MakeSort"] = sortOrder == "make" ? "make_desc" : "make";
@@ -150,12 +152,16 @@ namespace GarageMVC.Controllers
             ViewData["BusAmount"] = bus;
             ViewData["MotorcycleAmount"] = motorcycle;
             ViewData["AirplaneAmount"] = airplan;
+            ViewData["InventoryCount"] = _context.ParkedVehicle.Count();
 
             var vehicles = from v in _context.ParkedVehicle
                            select v;
 
             switch (sortOrder)
             {
+                case "vehicleType":
+                    vehicles = vehicles.OrderBy(v => v.VehicleType);
+                    break;
                 case "vehicleType_desc":
                     vehicles = vehicles.OrderByDescending(v => v.VehicleType);
                     break;
@@ -196,7 +202,7 @@ namespace GarageMVC.Controllers
                     vehicles = vehicles.OrderByDescending(v => v.CheckInTime);
                     break;
                 default:
-                    vehicles = vehicles.OrderBy(v => v.RegNumber); // Default sorting by registration number
+                    vehicles = vehicles.OrderBy(v => v.RegNumber);
                     break;
             }
 

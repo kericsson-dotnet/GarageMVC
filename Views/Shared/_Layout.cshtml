@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,37 +9,37 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GarageMVC.styles.css" asp-append-version="true" />
 </head>
-
 <body>
     <header>
         <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Garage" asp-action="Index">Garage</a>
+               
+                <a class="navbar-brand" asp-controller="Garage" asp-action="Index" style="color: white; font-weight: bold; font-size: 22px;">Garage</a>
+                @* Visa endast Statistics view om garaget inte är tomt *@
                 @{
-                    bool isDbEmpty = ViewBag.IsDbEmpty ?? true; // Default value is true if ViewBag.IsDbEmpty is null
+                    bool isDbEmpty = ViewBag.IsDbEmpty ?? true; 
                 }
 
                 @if (!isDbEmpty)
                 {
-                    <a class="navbar-brand" asp-controller="Garage" asp-action="Statistics">Statistics</a>
+                    <a class="navbar-brand" asp-controller="Garage" asp-action="Statistics" style="color: white; font-weight: bold; font-size: 22px;">Statistics</a>
                 }
-                @* <a class="navbar-brand" asp-controller="Garage" asp-action="Statistics">Statistics</a> *@
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
-                    aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                         <!-- Counter för lediga parkeringsplatser -->
-                        @* <div class="inventory">
-                            <p class="navbar-text">Parked vehicles: @ViewData["InventoryCount"] / 24</p>
-                        </div> *@
+                        <p class="navbar-text">Parked vehicles: @ViewData["InventoryCount"]</p>
                     </ul>
                     <form class="d-flex" asp-action="Search">
-                        <input class="form-control me-sm-2" name="searchValue" type="search"
-                            style="background-color:white" placeholder="">
+                        <input class="form-control me-sm-2" name="searchValue" type="search" style="background-color:white; color: black;" placeholder="">
                         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                     </form>
+@*                     <form class="d-flex" asp-action="Search">
+                        <input class="form-control me-sm-2" name="searchValue" type="search" style="background-color:white" placeholder="">
+                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    </form> *@
                 </div>
             </div>
         </nav>
@@ -52,18 +51,16 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - GarageMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Group8</a>
+    <footer class="border-top footer text-muted d-flex justify-content-center align-items-center">
+        <div class="container text-center">
+            &copy; 2024 - [MVC]Garage v1.1
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    @*   <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

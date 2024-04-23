@@ -100,17 +100,10 @@ body {
   padding: 0.5rem;
 }
 
-.inventory {
-  display: flex;
-  justify-content: center;
-  /* Horizontal centering */
-  align-items: center;
-  /* Vertical centering */
-}
-
 .navbar-text {
   margin-top: auto;
   margin-bottom: auto;
   font-size: 14px;
   /* Adjust font size as needed */
 }
+

@@ -8,6 +8,5 @@
 
         public double LongestDurationHours { get; set; } = default;
         public double ShortestDurationHours { get; set; } = default;
-
     }
 }
