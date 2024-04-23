@@ -101,7 +101,7 @@ namespace GarageMVC.Controllers
             ViewData["Airplane"] = parkNumber / 3;
             ViewData["Bus"] = parkNumber / 2;
             ViewData["Car"] = parkNumber;
-
+            ViewData["InventoryCount"] = _context.ParkedVehicle.Count();
             ViewData["CarAmount"] = car;
             ViewData["TruckAmount"] = truck;
             ViewData["BusAmount"] = bus;
